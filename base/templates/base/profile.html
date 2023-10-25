@@ -1,0 +1,406 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+
+<style>
+    .wrapper {
+        padding: 40px;
+    }
+
+    .image--cover {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+
+        object-fit: cover;
+        object-position: center right;
+    }
+
+    .file {
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .file input {
+        position: absolute;
+        font-size: 50px;
+        opacity: 0;
+        right: 0;
+        top: 0;
+    }
+
+
+</style>
+
+
+<div class="container">
+    <div class="main-body">
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/index/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{request.user}}</li>
+            </ol>
+        </nav>
+        <!-- /Breadcrumb -->
+
+        <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <div class="wrapper">
+                                <img src="{{ user.profile.profileimg.url }}" alt="" class="image--cover">
+                                <div class="file btn btn-sm btn-outline-success">
+                                    <i class="fa-regular fa-user"></i> Change Profie Picture
+                                    <input type="file" name="file" />
+                                </div>
+
+                            </div>
+
+                            <div class="mt-0">
+                                <h4>{{ request.user.get_full_name }}</h4>
+                                <p class="text-secondary mb-1">{{ request.user.profile.bio }}</p>
+                                <p class="text-muted font-size-sm">{{ request.user.profile.location }}, {{request.user.profile.country }}</p>
+                                <hr>
+
+
+
+                                <ul class="list-group list-group-horizontal">
+                                    <a href="" class="ms-2" style="text-decoration: none;">
+                                        <li class="list-group-item  btn btn-outline-info"><b>Follower: 1000</b></li>
+                                    </a>
+
+                                    <a href="" style="text-decoration: none;">
+                                        <li class="list-group-item ms-2 btn btn-outline-info "><b>Following: 1000</b>
+                                        </li>
+                                    </a>
+
+                                </ul>
+                                <hr>
+                                {% if request.user.id != profile_data.id %}
+                                <p class="d-inline me-3">Total Post : {{post_length}}</p>
+                                <span>|</span>
+
+
+                                <a href="#" class="btn btn-sm btn-primary ms-3 px-2" id="follow-button">+ Follow</a>
+
+
+                                {% endif %}
+
+                                <hr>
+
+
+
+
+
+
+
+                                <h6 class="text-start mb-4">About Me</h6>
+                                <p class="text-justify">{{ request.user.profile.about }}
+                                </p>
+
+                                <hr>
+                                <h6 class="text-start mb-4">Social</h6>
+                                <div class="hover-effect1 text-center">
+
+                                    <a target="_blank" href="{{ request.user.profile.facebook }}" title="Facebook"><i
+                                            class="fa-brands fa-facebook"></i></a>
+                                    <a target="_blank" href="{{ request.user.profile.linkdin }}" title="LinkdIn"><i
+                                            class="fa-brands fa-linkedin"></i></a>
+                                    <a target="_blank" href="{{ request.user.profile.twitter }}" title="Twitter"><i
+                                            class="fa-brands fa-twitter"></i></a>
+
+                                    <a target="_blank" href="{{ request.user.profile.github }}" title="Github"><i
+                                            class="fa-brands fa-github"></i></a>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">First Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ request.user.first_name }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Last Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ request.user.last_name }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ request.user.email }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Address</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ request.user.profile.location }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Country</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ request.user.profile.country }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Facbook URL</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ request.user.profile.facebook }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Twitter URL</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ request.user.profile.twitter }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">LinkdIn URl</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ request.user.profile.linkdin }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Github URL</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ request.user.profile.github }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a class="btn btn-outline-info px-4"
+                                    href="{% url 'update' request.user.profile.id %}">Edit Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- USer All Post -->
+
+                <div class="row" style="overflow: hidden;">
+
+                    {% for p in posts %}
+
+
+                    <div class="bootstrap snippets bootdey" style="overflow: hidden;">
+                        <div class="col">
+                            <div class="panel panel-white post panel-shadow" style="overflow: hidden;">
+                                <div class="post-heading mt-3 ms-2">
+                                    <div class="row image prob">
+                                        <div class="col-1">
+                                            <img src="{{p.authorprofile.profileimg.url}}" class="img-circle avatar"
+                                                alt="user profile image">
+                                        </div>
+                                        <div class="col">
+                                            <div class="row">
+                                                <div class="col-10">
+                                                    <div class="title h5">
+                                                        <a href="#" class=""><b>{{p.author.get_full_name}}</b></a>
+                                                    </div>
+                                                </div>
+
+
+                                                {% if request.user.id == p.author.id or request.user.is_staff == True %}
+
+
+
+                                                <div class="col-2">
+                                                    <div class="postedit">
+                                                        <a class="me-3" href="#" title="Edit">
+                                                            <i class="fa-regular fa-pen-to-square fa-xs"></i>
+                                                        </a>
+                                                        <a href="/profile_post_delete?post_id={{p.id}}" title="Delete">
+                                                            <i class="fa-solid fa-trash fa-xs"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                                {% endif %}
+
+                                            </div>
+
+                                            <h6 class="text-muted time">{{p.updated_at}}</h6>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="post-description">
+                                    <p>{{p.text}}</p>
+
+                                    {% if p.postimg %}
+                                    <img style="height: 400px; width:auto;" src="{{ p.postimg.url }}" alt="">
+
+
+                                    {% endif %}
+
+                                    <div class="">
+
+                                        <div class="my-4 flex space-x-4 lg:font-bold" style="display: inline;">
+                                            <a href="/like?post_id={{p.id}}" class="flex items-center space-x-2"
+                                                style="display: inline;">
+                                                <div class="rounded-full text-black" style="display: inline;">
+
+                                                    <!-- love icon START-->
+                                                    <i class="fa-regular fa-heart fa-lg mt-4 "
+                                                        style="color: #c82828;"></i>
+                                                    <!-- love icon ENd-->
+
+                                                    {% if p.total_like >= 1 %}
+
+
+                                                    {% endif %}
+                                                </div>
+                                            </a>
+                                            <h6 class="ms-3" style="display: inline;">{{p.total_like}}</h6>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="post-footer">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Add a comment" type="text">
+                                        <span class="input-group-addon">
+                                            <a href="#"><i class="fa fa-edit"></i></a>
+                                        </span>
+                                    </div>
+                                    <!-- <ul class="comments-list">
+                                        <li class="comment">
+                                            <a class="pull-left" href="#">
+                                                <img class="avatar" src="https://bootdey.com/img/Content/user_1.jpg" alt="avatar">
+                                            </a>
+                                            <div class="comment-body">
+                                                <div class="comment-heading">
+                                                    <h4 class="user">Gavino Free</h4>
+                                                    <h5 class="time">5 minutes ago</h5>
+                                                </div>
+                                                <p>Sure, oooooooooooooooohhhhhhhhhhhhhhhh</p>
+                                            </div>
+                                            <ul class="comments-list">
+                                                <li class="comment">
+                                                    <a class="pull-left" href="#">
+                                                        <img class="avatar" src="https://bootdey.com/img/Content/user_3.jpg" alt="avatar">
+                                                    </a>
+                                                    <div class="comment-body">
+                                                        <div class="comment-heading">
+                                                            <h4 class="user">Ryan Haywood</h4>
+                                                            <h5 class="time">3 minutes ago</h5>
+                                                        </div>
+                                                        <p>Relax my friend</p>
+                                                    </div>
+                                                </li> 
+                                                <li class="comment">
+                                                    <a class="pull-left" href="#">
+                                                        <img class="avatar" src="https://bootdey.com/img/Content/user_2.jpg" alt="avatar">
+                                                    </a>
+                                                    <div class="comment-body">
+                                                        <div class="comment-heading">
+                                                            <h4 class="user">Gavino Free</h4>
+                                                            <h5 class="time">3 minutes ago</h5>
+                                                        </div>
+                                                        <p>Ok, cool.</p>
+                                                    </div>
+                                                </li> 
+                                            </ul>
+                                        </li>
+                                    </ul> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- <script>
+    $(document).ready(function(){
+        $("#follow-button").click(function(){
+            $(this).text($(this).text() == '+ Follow' ? 'Following' : '+ Follow');
+            $(this).toggleClass('btn-success')
+        });
+    });
+</script> -->
+<script>
+    $(document).ready(function() {
+        // Check if the button state is stored in local storage
+        var isFollowing = localStorage.getItem('isFollowing') === 'true';
+
+        // Set the initial button text and style based on the stored state
+        if (isFollowing) {
+            $("#follow-button").text('Following').addClass('btn-success');
+        }
+
+        $("#follow-button").click(function() {
+            // Toggle the button state
+            isFollowing = !isFollowing;
+
+            // Update the button text and style
+            if (isFollowing) {
+                $("#follow-button").text('Following').addClass('btn-success');
+            } else {
+                $("#follow-button").text('+ Follow').removeClass('btn-success');
+            }
+
+            // Store the button state in local storage
+            localStorage.setItem('isFollowing', isFollowing);
+        });
+    });
+</script>
+
+
+
+{% endblock content %}

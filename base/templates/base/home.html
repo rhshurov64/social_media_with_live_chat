@@ -1,0 +1,328 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<div class="container">
+    <div class="row">
+
+        <!-- left side start -->
+
+        <div class="col-4">
+            <div id="first_box" class="box">
+
+
+
+                <!-- profile design start-->
+
+                <div class="first_halve">
+                    <div class="user_img">
+                        <header class="profile_header">
+                            <img src="https://th.bing.com/th/id/OIP.61YIIyvWOY5d9dpX2l66qAHaCP?w=350&h=106&c=7&r=0&o=5&pid=1.7"
+                                class="prof_header_img" alt="header">
+                        </header>
+                        <img src="{{ request.user.profile.profileimg.url }}" class="profile_img"
+                            alt="user profile images">
+                    </div>
+                    <div class="user_about">
+                        <h5 class="my-3">{{ request.user.get_full_name }}</h5>
+                        <span class="user_job">{{ request.user.profile.bio }}</p>
+                            <p class="text-muted font-size-sm">{{ request.user.profile.location }}, {{request.user.profile.country}}</p>
+                            <div class="user_data mt-3">
+                                <span class="about_profile">
+                                    
+                                    {% if total_post == 0 %}
+                                    <h5>0 |</h5>Post
+
+                                    {% elif total_post >= 0 %}
+                                    <h5>{{total_post}} |</h5>Post
+                                    {% endif %}
+                                        
+                                </span>
+                                <span class="about_profile">
+                                    <h5>0</h5>Followers
+                                </span>
+                                <span class="about_profile">
+                                    <h5>| 0</h5>Following
+                                </span>
+                            </div>
+
+                    </div>
+                    <hr>
+                    <div class="second_halve mt-3">
+                        <ul class="navigation">
+
+                            <li class="nav_link"> <a href class="nav_l"><i class="bi bi-chat-square-dots-fill"></i>
+                                    Chat</a> </li>
+                            <li class="nav_link"><a href class="nav_l"><i class="bi bi-bell-fill"></i>
+                                    Notification</a></li>
+                            <li class="nav_link"><a href class="nav_l"><i class="bi bi-gear-fill"></i>
+                                    Setting</a></li>
+
+                        </ul>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-center">
+                        <a href="/profile/" class="btn btn-outline-success mb-4"><i class="bi bi-eye-fill"></i> View
+                            Profile</a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- sugeestions start-->
+
+            <div class="suggesions text-center">
+                <h3 class="mb-3">People You May Know</h3>
+                <div id="third_box" class="box">
+
+
+                    {% for d in data %}
+                    <!-- suggetion profile -->
+                    <div class="container my-3"
+                        style="background-color: #ECECEC; border-radius: 10px; box-shadow: 0 0.2rem rem rgba(0, 0, 0, 0.7); ">
+                        <div class="row">
+
+                            <div class="col-2">
+                                <img style="height: 60px; width:60px; border-radius:50%;border-color:#ECECEC; "
+                                    src="{{ request.user.profile.profileimg.url }}" class="profile_img mt-1"
+                                    alt="user profile images">
+
+                            </div>
+
+                            <div class="col-9 mt-2">
+                                <a href="">
+                                    <h5>{{ d.get_full_name }}</h5>
+                                </a>
+                            </div>
+
+                            <div class="col-1 mt-3">
+                                <span class="add_btn"><i class="fa-solid fa-plus"></i></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+                    <div class="d-flex justify-content-center">
+                        <a href="/suggestion/" class="btn btn-sm btn-success"> See
+                            More ...</a>
+
+                    </div>
+
+
+
+
+
+
+                </div>
+
+            </div>
+            <!-- sugeestions end-->
+
+
+
+        </div>
+        <!-- left side end -->
+
+
+        <!-- right side start-->
+
+
+
+        <div class="col-8">
+
+            <!-- status given box -->
+            <div style="background-color: #ECECEC; border-radius: 5px; box-shadow: 0 0.2rem rem rgba(0, 0, 0, 0.7); "
+                class="post-box w-100 row mt-4 mb-4">
+                <h4><img style="height: 60px; width:60px; border-radius:50%; border-color:#ECECEC; "
+                        src="{{ request.user.profile.profileimg.url }}" class="profile_img mt-1"
+                        alt="user profile images"> Hey {{ request.user.first_name }}!</h4>
+
+                <form action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                    <textarea name="text" id="" cols="92" rows="5" placeholder="Share Your Throughts!"></textarea>
+                    <div class="row">
+                        <div class="col-1 p-2">
+                            <input type="file" name="image" id="">
+                        </div>
+
+                        <div class="col-1 offset-8  p-2">
+                            <input type="submit" class="btn btn-sm btn-outline-success px-5" value="Share">
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+
+            </div>
+            <!-- status given box end-->
+
+
+
+            <!-- Post Design Start -->
+            <div class="row" style="overflow: hidden;">
+
+                {% for p in posts %}
+
+
+                <div class="bootstrap snippets bootdey" style="overflow: hidden;">
+                    <div class="col">
+                        <div class="panel panel-white post panel-shadow" style="overflow: hidden;">
+                            <div class="post-heading mt-3 ms-2">
+                                <div class="row image prob">
+                                    <div class="col-1">
+                                        <img src="{{p.authorprofile.profileimg.url}}" class="img-circle avatar"
+                                            alt="user profile image">
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <div class="title h5">
+                                                    <a href="#" class=""><b>{{p.author.get_full_name}}</b></a>
+                                                </div>
+                                            </div>
+
+
+                                            {% if request.user.id == p.author.id or request.user.is_staff == True %}
+
+
+
+                                            <div class="col-2">
+                                                <div class="postedit">
+                                                    <a class="me-3" href="#" title="Edit">
+                                                        <i class="fa-regular fa-pen-to-square fa-xs"></i>
+                                                    </a>
+                                                    <a href="/postdelete?post_id={{p.id}}" title="Delete">
+                                                        <i class="fa-solid fa-trash fa-xs"></i>
+                                                    </a>
+
+                                                </div>
+                                            </div>
+                                            {% endif %}
+
+                                        </div>
+
+                                        <h6 class="text-muted time">{{p.updated_at}}</h6>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="post-description">
+                                <p>{{p.text}}</p>
+
+                                {% if p.postimg %}
+                                <img style="height: 400px; width:auto;" src="{{ p.postimg.url }}" alt="">
+
+
+                                {% endif %}
+
+                                <div class="">
+
+                                    <div class="my-4 flex space-x-4 lg:font-bold" style="display: inline;">
+                                        <a href="/like?post_id={{p.id}}" class="flex items-center space-x-2" style="display: inline;">
+                                            <div class="rounded-full text-black" style="display: inline;">
+
+                                                <!-- love icon START-->
+                                                <i class="fa-regular fa-heart fa-lg mt-4" id="love" style="color: #c82828;"></i>
+                                                <!-- love icon ENd-->
+
+                                                {% if p.total_like >= 1 %}
+                                                
+
+                                                {% endif %}
+                                            </div>                                           
+                                        </a>
+                                        <h6 class="ms-3" style="display: inline;">{{p.total_like}}</h6>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-footer">
+
+                                <!-- comment start -->
+                                <form action="/comment/?post_id={{p.id}}" method="POST">{% csrf_token %}
+                                    <div class="input-group">
+                                        <input class="form-control" name="comment" placeholder="Add a comment" type="text">
+                                        <span class="input-group-addon">
+                                            <button class="btn btn-success px-2" type="submit" id="button-addon2"><i class="fa-regular fa-paper-plane"></i> Comment</button>
+    
+                                        </span>
+                                    </div>
+                                </form>
+
+                                <ul class="comments-list">
+                                    <li class="comment">
+                                        <a class="pull-left" href="#">
+                                            <img class="avatar" src="https://bootdey.com/img/Content/user_1.jpg" alt="avatar">
+                                        </a>
+                                        <div class="comment-body">
+                                            <div class="comment-heading">
+                                                <h4 class="user">Gavino Free</h4>
+                                                <h5 class="time">5 minutes ago</h5>
+                                            </div>
+                                            <p>Sure, oooooooooooooooohhhhhhhhhhhhhhhh</p>
+                                        </div>
+                                        <ul class="comments-list">
+                                            <li class="comment">
+                                                <a class="pull-left" href="#">
+                                                    <img class="avatar" src="https://bootdey.com/img/Content/user_3.jpg" alt="avatar">
+                                                </a>
+                                                <div class="comment-body">
+                                                    <div class="comment-heading">
+                                                        <h4 class="user">Ryan Haywood</h4>
+                                                        <h5 class="time">3 minutes ago</h5>
+                                                    </div>
+                                                    <p>Relax my friend</p>
+                                                </div>
+                                            </li> 
+                                            <li class="comment">
+                                                <a class="pull-left" href="#">
+                                                    <img class="avatar" src="https://bootdey.com/img/Content/user_2.jpg" alt="avatar">
+                                                </a>
+                                                <div class="comment-body">
+                                                    <div class="comment-heading">
+                                                        <h4 class="user">Gavino Free</h4>
+                                                        <h5 class="time">3 minutes ago</h5>
+                                                    </div>
+                                                    <p>Ok, cool.</p>
+                                                </div>
+                                            </li> 
+                                            <li class="comment">
+                                                <div class="input-group">
+                                                    <input class="form-control" name="replay" placeholder="Add a comment" type="text">
+                                                    <span class="input-group-addon">
+                                                        <button class="btn btn-success px-2" type="submit" id="button-addon2"><i class="fa-regular fa-paper-plane"></i> Replay</button>
+                
+                                                    </span>
+                                                </div>
+                                            </li> 
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- comment end -->
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+            </div>
+
+            <!-- Post Design Start End -->
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}

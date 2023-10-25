@@ -1,0 +1,134 @@
+:root{
+    font-family:  poppins,Helvetica, sans-serif;
+    font-size: 18px;
+    overflow-x: hidden;
+    background-color: rgba(236, 236, 243, 0.815);
+    --gray-- : rgb(110, 110, 110);
+    --black--: rgb(31, 31, 31);
+    --blue--: rgb(53, 137, 233);
+}
+
+
+#main_layout{
+    display: flex;
+    justify-content: center;
+    /* margin-left: 4%; */
+}
+#container_main{
+    display: flex;
+    justify-content: center;
+   
+}
+.box{
+    margin: 0.5em;
+    
+}
+
+
+
+
+
+li{
+    list-style: none;
+    display: inline;
+}
+
+a{
+    text-decoration: none !important;
+}
+
+.first_halve {
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+}
+.suggesions{
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgba(220, 220, 220, 0.925);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    overflow: hidden;
+
+}
+
+.first_halve, .first_post, .suggested_box, .article_box  {
+    border: 1px solid rgba(220, 220, 220, 0.925);
+}
+.prof_header_img{
+    width: 100%;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+.user_img, .user_about{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.profile_img{
+    width: 3.5em;
+    border: 2px solid white;
+    border-radius: 5px;
+    margin-top: -0.8em;
+    padding: 2px;
+}
+.user_data{
+    display: flex;
+    margin-top: -2.5em;
+   
+    color: black;
+    justify-content: center;
+}
+.about_profile{
+    margin: 0.5em;
+    font-size: 13px;
+    text-align: center;
+    color: var(--gray--);
+}
+h5{
+    font-size: 17px;
+    color: black;
+    margin-bottom: 5px;
+}
+.user_about{
+    color: var(--gray--);
+    font-size: 15px;
+}
+h3{
+    color: black;
+}
+.user_profile{
+    width: 80%;
+}
+.user_job {
+    font-size: 14px;
+    margin-top: -1em;
+}
+
+/* */
+.second_halve{
+    margin-top: -1em;
+    margin-left: -1.5em;
+}
+.img_icon{
+    width: 1.3em;
+    margin-right: 10px;
+}
+.nav_link{
+display: block;
+font-size: 16px;
+color: var(--black--);
+font-weight: 600;
+margin: 0.35em;
+}
+.more_on_acct {
+   display: flex;
+   justify-content: center;
+    font-size: 15px;
+    padding: 7px;
+    font-weight: 600;
+    padding-bottom: 10px;
+   
+}
+
+

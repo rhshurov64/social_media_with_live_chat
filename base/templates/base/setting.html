@@ -1,0 +1,81 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+
+<div class="alert alert-primary fade show alert-dismissible" role="alert">
+    <strong><i class="fa fa-warning" aria-hidden="true"></i></strong>
+    {{message}}
+</div>
+
+{% endfor %}
+{% endif %}
+
+<div class="container">
+
+    <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3  mb-5"><a
+            href="/">Home</a> / Account Setting for <b>{{user.username}}!</b>
+    </h1>
+
+    <form action="" method="POST"enctype="multipart/form-data" >{% csrf_token %}
+  
+        <div class="col-8 mb-3">
+            <label for="formFile" class="form-label mb-2">Upload Profile Image</label>
+            <input class="form-control image shadow-none bg-gray-100" name='image' type="file" id="formFile">
+        </div>
+
+
+        <div class="col-8 mb-3"">
+            <div class="form-group">
+                <input  class="form-control type="text" name="bio" id="bio" placeholder="Write your Bio" rows="3">
+            </div>
+        </div>
+        <div class="col-8 mb-3"">
+            <div class="form-group">
+                <textarea class="form-control" name="about" placeholder="Write About You" rows="3"></textarea>
+                
+            </div>
+        </div>
+
+        <div class="col-8">
+            <div class="mb-3">
+                <input type="text" class="form-control" id="location" name = "location" aria-describedby="emailHelp" placeholder="Location">
+              </div>
+        </div>
+        <div class="col-8">
+            <div class="mb-3">
+                <input type="text" class="form-control" id="country" name = "country" aria-describedby="emailHelp" placeholder="Country">
+              </div>
+        </div>
+        <div class="col-8">
+            <div class="mb-3">
+                <input type="text" class="form-control" id="facebook" name = "facebook" aria-describedby="emailHelp" placeholder="Facebook URL">
+              </div>
+        </div>
+        <div class="col-8">
+            <div class="mb-3">
+                <input type="text" class="form-control" id="twitter" name = "twitter" aria-describedby="emailHelp" placeholder="Twitter URL">
+              </div>
+        </div>
+        <div class="col-8">
+            <div class="mb-3">
+                <input type="text" class="form-control" id="linkdin" name = "linkdin" aria-describedby="emailHelp" placeholder="LinkIdn URL">
+              </div>
+        </div>
+        <div class="col-8">
+            <div class="mb-3">
+                <input type="text" class="form-control" id="github" name = "github" aria-describedby="emailHelp" placeholder="Github URL">
+              </div>
+        </div>
+
+                
+        <div class="text-center col-2">
+            <input type="submit" class="btn btn-primary px-5 mb-5 w-100" value="Save">
+        </div>
+    </form>
+
+</div>
+
+{% endblock content %}

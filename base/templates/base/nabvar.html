@@ -1,0 +1,115 @@
+<style>
+  .icon-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    color: #333333;
+    background: #dddddd;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+  }
+  
+  .icon-button:hover {
+    cursor: pointer;
+  }
+  
+  .icon-button:active {
+    background: #cccccc;
+  }
+  
+  .icon-button__badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 25px;
+    height: 25px;
+    background: red;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+  }
+  
+</style>
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-success p-0">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+        aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand" href="#">Social Web</a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/index/">Home</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#">Chat</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Video Conference</a>
+          </li>
+        </ul>
+  
+        
+  
+        {% if not request.user.is_authenticated %}
+  
+        <!-- Right navigation -->
+        <div class="navbar-nav ms-lg-0 p-2">
+          <a class="nav-item nav-link" href="/login/">Login</a>
+        </div>
+        <!-- Action -->
+        <div class="d-flex align-items-lg-center mt-3 mt-lg-0 ms-lg-2">
+          <a href="/signup/" class="btn btn-sm btn-primary w-full w-lg-auto me-3">
+            Register
+          </a>
+        </div>
+        {% endif %}
+  
+        {% if request.user.is_authenticated %}
+        <div class="menu mt-1">
+          
+          <a href=""><i class="fa-solid fa-video fa-lg me-4" style="color: #FFFFFF;"></i></a>
+          <a href=""><i class="fa-solid fa-comments fa-lg me-4" style="color: #FFFFFF;"></i></a>
+          <a href=""><i class="fa-solid fa-bell fa-lg" style="color: #FFFFFF;"></i></a>
+          
+        </div>
+        <div class="dropdown d-flex align-items-lg-center mt-0 me-lg-4 me-5 ms-5">
+          <!-- <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton2"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{user.profile.profileimg.url}}" width="30" height="30" class="rounded-circle">
+          </button> -->
+          <a class="btn btn-link dropdown-toggle" style="margin-right: 50px;" type="button" id="dropdownMenuButton2"
+          data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{user.profile.profileimg.url}}" width="40" height="40" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu me-5" aria-labelledby="dropdownMenuButton2">
+            <li><a class="dropdown-item" href="/index/">Dashboard</a></li>
+            <li><a class="dropdown-item" href="/profile/">Profile</a></li>
+            <!-- <li><a class="dropdown-item" href="/setting/">Setting</a></li> -->
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/logout/">Logout</a></li>
+          </ul>
+        </div>
+
+        
+
+
+        {% endif %}
+  
+        
+      </div>
+    </div>
+  </nav>

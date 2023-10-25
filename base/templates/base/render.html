@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+
+<div class="alert alert-primary fade show alert-dismissible" role="alert">
+    <strong><i class="fa fa-warning" aria-hidden="true"></i></strong>
+    {{message}}
+</div>
+
+{% endfor %}
+{% endif %}
+
+<div class="container">
+    <h1 class="mb-5 mt-5">Welcome {{request.user}}, Please Set Your Profile! </h1>
+    <a href="/setting/"><button type="button" class="btn btn-outline-success">Complete Profile</button></a> 
+</div>
+
+
+
+    
+{% endblock content %}
+    
