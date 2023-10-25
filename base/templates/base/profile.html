@@ -35,6 +35,9 @@
 </style>
 
 
+    
+
+    
 <div class="container">
     <div class="main-body">
 
@@ -42,7 +45,7 @@
         <nav aria-label="breadcrumb" class="main-breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/index/">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{request.user}}</li>
+                <li class="breadcrumb-item active" aria-current="page">{{ profile_data.user.username }}</li>
             </ol>
         </nav>
         <!-- /Breadcrumb -->
@@ -51,20 +54,26 @@
             <div class="col-md-4 mb-3">
                 <div class="card">
                     <div class="card-body">
+                        {% if request.user.id != profile_data.user.id %}
+                        <a class="btn btn-outline-danger" style="align-self: center;" href=""><i class="fa-solid fa-ban me-2"></i>Block</a>
+                        {% endif %}
                         <div class="d-flex flex-column align-items-center text-center">
+                            
                             <div class="wrapper">
-                                <img src="{{ user.profile.profileimg.url }}" alt="" class="image--cover">
+                                <img src="{{ profile_data.profileimg.url }}" alt="" class="image--cover">
+                                {% if request.user.id == profile_data.user.id %}
                                 <div class="file btn btn-sm btn-outline-success">
                                     <i class="fa-regular fa-user"></i> Change Profie Picture
                                     <input type="file" name="file" />
                                 </div>
+                                {% endif %}
 
                             </div>
 
                             <div class="mt-0">
-                                <h4>{{ request.user.get_full_name }}</h4>
-                                <p class="text-secondary mb-1">{{ request.user.profile.bio }}</p>
-                                <p class="text-muted font-size-sm">{{ request.user.profile.location }}, {{request.user.profile.country }}</p>
+                                <h4>{{ profile_data.user.get_full_name }}</h4>
+                                <p class="text-secondary mb-1">{{ profile_data.bio }}</p>
+                                <p class="text-muted font-size-sm">{{ profile_data.location }}, {{profile_data.country }}</p>
                                 <hr>
 
 
@@ -81,8 +90,10 @@
 
                                 </ul>
                                 <hr>
-                                {% if request.user.id != profile_data.id %}
                                 <p class="d-inline me-3">Total Post : {{post_length}}</p>
+                                {% if request.user.id != profile_data.user.id %}
+                                
+                                
                                 <span>|</span>
 
 
@@ -100,21 +111,21 @@
 
 
                                 <h6 class="text-start mb-4">About Me</h6>
-                                <p class="text-justify">{{ request.user.profile.about }}
+                                <p class="text-justify">{{ profile_data.about }}
                                 </p>
 
                                 <hr>
                                 <h6 class="text-start mb-4">Social</h6>
                                 <div class="hover-effect1 text-center">
 
-                                    <a target="_blank" href="{{ request.user.profile.facebook }}" title="Facebook"><i
+                                    <a target="_blank" href="{{ profile_data.facebook }}" title="Facebook"><i
                                             class="fa-brands fa-facebook"></i></a>
-                                    <a target="_blank" href="{{ request.user.profile.linkdin }}" title="LinkdIn"><i
+                                    <a target="_blank" href="{{ profile_data.linkdin }}" title="LinkdIn"><i
                                             class="fa-brands fa-linkedin"></i></a>
-                                    <a target="_blank" href="{{ request.user.profile.twitter }}" title="Twitter"><i
+                                    <a target="_blank" href="{{ profile_data.twitter }}" title="Twitter"><i
                                             class="fa-brands fa-twitter"></i></a>
 
-                                    <a target="_blank" href="{{ request.user.profile.github }}" title="Github"><i
+                                    <a target="_blank" href="{{ profile_data.github }}" title="Github"><i
                                             class="fa-brands fa-github"></i></a>
 
                                 </div>
@@ -126,6 +137,11 @@
 
             </div>
             <div class="col-md-8">
+                
+                {% if request.user.id == profile_data.user.id %}
+                    
+                
+                    
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="row">
@@ -133,7 +149,7 @@
                                 <h6 class="mb-0">First Name</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ request.user.first_name }}
+                                {{ profile_data.user.first_name }}
                             </div>
                         </div>
                         <hr>
@@ -142,7 +158,7 @@
                                 <h6 class="mb-0">Last Name</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ request.user.last_name }}
+                                {{ profile_data.user.last_name }}
                             </div>
                         </div>
                         <hr>
@@ -151,7 +167,7 @@
                                 <h6 class="mb-0">Email</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ request.user.email }}
+                                {{ profile_data.user.email }}
                             </div>
                         </div>
                         <hr>
@@ -160,7 +176,7 @@
                                 <h6 class="mb-0">Address</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ request.user.profile.location }}
+                                {{ profile_data.location }}
                             </div>
                         </div>
                         <hr>
@@ -169,7 +185,7 @@
                                 <h6 class="mb-0">Country</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ request.user.profile.country }}
+                                {{ profile_data.country }}
                             </div>
                         </div>
                         <hr>
@@ -178,7 +194,7 @@
                                 <h6 class="mb-0">Facbook URL</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ request.user.profile.facebook }}
+                                {{ profile_data.facebook }}
                             </div>
                         </div>
                         <hr>
@@ -187,7 +203,7 @@
                                 <h6 class="mb-0">Twitter URL</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ request.user.profile.twitter }}
+                                {{ profile_data.twitter }}
                             </div>
                         </div>
                         <hr>
@@ -196,7 +212,7 @@
                                 <h6 class="mb-0">LinkdIn URl</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ request.user.profile.linkdin }}
+                                {{ profile_data.linkdin }}
                             </div>
                         </div>
                         <hr>
@@ -205,24 +221,31 @@
                                 <h6 class="mb-0">Github URL</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ request.user.profile.github }}
+                                {{ profile_data.github }}
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-12">
                                 <a class="btn btn-outline-info px-4"
-                                    href="{% url 'update' request.user.profile.id %}">Edit Profile</a>
+                                    href="{% url 'update' profile_data.id %}">Edit Profile</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {% endif %}
+
+
 
                 <!-- USer All Post -->
 
                 <div class="row" style="overflow: hidden;">
+                
+                {% if posts %}
 
+                    
+               
                     {% for p in posts %}
 
 
@@ -297,63 +320,26 @@
                                                 </div>
                                             </a>
                                             <h6 class="ms-3" style="display: inline;">{{p.total_like}}</h6>
+                                            
+                                            <a href="{% url 'show_comment' p.id %}"><i class="fa-regular fa-comment fa-lg  ms-5"></i></a>
+                                            <h6 class="ms-3" style="display: inline;">{{p.total_comment}}</h6>
 
                                         </div>
                                     </div>
                                 </div>
-                                <div class="post-footer">
-                                    <div class="input-group">
-                                        <input class="form-control" placeholder="Add a comment" type="text">
-                                        <span class="input-group-addon">
-                                            <a href="#"><i class="fa fa-edit"></i></a>
-                                        </span>
-                                    </div>
-                                    <!-- <ul class="comments-list">
-                                        <li class="comment">
-                                            <a class="pull-left" href="#">
-                                                <img class="avatar" src="https://bootdey.com/img/Content/user_1.jpg" alt="avatar">
-                                            </a>
-                                            <div class="comment-body">
-                                                <div class="comment-heading">
-                                                    <h4 class="user">Gavino Free</h4>
-                                                    <h5 class="time">5 minutes ago</h5>
-                                                </div>
-                                                <p>Sure, oooooooooooooooohhhhhhhhhhhhhhhh</p>
-                                            </div>
-                                            <ul class="comments-list">
-                                                <li class="comment">
-                                                    <a class="pull-left" href="#">
-                                                        <img class="avatar" src="https://bootdey.com/img/Content/user_3.jpg" alt="avatar">
-                                                    </a>
-                                                    <div class="comment-body">
-                                                        <div class="comment-heading">
-                                                            <h4 class="user">Ryan Haywood</h4>
-                                                            <h5 class="time">3 minutes ago</h5>
-                                                        </div>
-                                                        <p>Relax my friend</p>
-                                                    </div>
-                                                </li> 
-                                                <li class="comment">
-                                                    <a class="pull-left" href="#">
-                                                        <img class="avatar" src="https://bootdey.com/img/Content/user_2.jpg" alt="avatar">
-                                                    </a>
-                                                    <div class="comment-body">
-                                                        <div class="comment-heading">
-                                                            <h4 class="user">Gavino Free</h4>
-                                                            <h5 class="time">3 minutes ago</h5>
-                                                        </div>
-                                                        <p>Ok, cool.</p>
-                                                    </div>
-                                                </li> 
-                                            </ul>
-                                        </li>
-                                    </ul> -->
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
 
                     {% endfor %}
+
+                
+                {% else %}
+
+                <span style="font-size: 40px; text-align:center;">No Post Yet</span>
+                    
+                {% endif %}
                 </div>
 
 

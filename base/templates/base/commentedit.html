@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4 p-5 mt-4" style="background-color: #F5F5F5;">
+            <div class="row">
+                <div class="col">
+                    <h6 class="alert alert-sm alert-info">Edit Comment</h6>
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <p class="ms-3">{{form}}</p>
+                        
+                        <input type="submit" value="Save" class="btn btn-sm btn-success mt-5 ms-5">
+                        <a href="{% url 'index' %}" class="btn btn-sm btn-danger mt-5 ms-2">Back To Home</a>
+            
+                    </form>
+                    
+            
+            
+                </div>  
+            </div>
+        </div>
+        <div class="col-4"></div>
+    </div>
+</div>
+
+    
+{% endblock content %}
+    

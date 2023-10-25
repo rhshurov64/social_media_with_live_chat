@@ -38,7 +38,7 @@
                     <div class="form-group form-input-fields form-group-lg has-feedback">
                         <div class="input-group mb-3">
                             <input type="text" style="width: 1145px;" class="search_box" placeholder=" Search For People" aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <button class="btn btn-success px-5" type="button" id="button-addon2">Button</button>
+                            <button class="btn btn-success px-4" type="button" id="button-addon2"><i class="fa-solid fa-user"></i>  Search</button>
                             </div>
                         </div>
                     </div>
@@ -62,14 +62,14 @@
 
                 <div class="col-2">
                     <img style="height: 66px; width:66px; border-radius:50%;border-color:#ECECEC; "
-                        src="{{ request.user.profile.profileimg.url }}" class="profile_img mt-1" alt="user profile images">
+                        src="{{ d.profile.profileimg.url }}" class="profile_img mt-1" alt="user profile images">
         
                 </div>
         
                 <div class="col-10 ">
-                    <a href="">
+                    <a href="{% url 'profile' d.id %}">
                         <h6>{{ d.get_full_name }}</h6>
-                        <a href="#" class="btn btn-sm btn-primary ms-1 px-2" id="follow-button">+ Follow</a>
+                        <a href="#" class="btn btn-sm btn-primary ms-1 px-2" id="{{d}}follow-button">+ Follow</a>
                     </a>
                 </div>
         
@@ -79,7 +79,6 @@
 
 
         </div>
-        <hr>
        
         {% endfor %}
 
@@ -88,7 +87,7 @@
     
 
 </div>
-
+{% for d in data %}
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
@@ -98,18 +97,18 @@
 
         // Set the initial button text and style based on the stored state
         if (isFollowing) {
-            $("#follow-button").text('Following').addClass('btn-success');
+            $("#{{d}}follow-button").text('Following').addClass('btn-success');
         }
 
-        $("#follow-button").click(function() {
+        $("#{{d}}follow-button").click(function() {
             // Toggle the button state
             isFollowing = !isFollowing;
 
             // Update the button text and style
             if (isFollowing) {
-                $("#follow-button").text('Following').addClass('btn-success');
+                $("#{{d}}follow-button").text('Following').addClass('btn-success');
             } else {
-                $("#follow-button").text('+ Follow').removeClass('btn-success');
+                $("#{{d}}follow-button").text('+ Follow').removeClass('btn-success');
             }
 
             // Store the button state in local storage
@@ -117,5 +116,5 @@
         });
     });
 </script>
-
+{% endfor %}
 {% endblock content %}

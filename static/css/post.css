@@ -104,3 +104,15 @@
 .post .post-footer .comments-list .comment > .comments-list {
   margin-left: 50px;
 }
+
+
+
+
+/* Replay Button Show Hide Css Start*/
+
+[data-toggle="collapse"].collapsed .if-not-collapsed,
+[data-toggle="collapse"]:not(.collapsed) .if-collapsed {display: none;}
+
+
+
+/* Replay Button Show Hide Css End*/

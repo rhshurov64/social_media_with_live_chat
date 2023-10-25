@@ -17,8 +17,12 @@ class PostAdmin(admin.ModelAdmin):
         
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
-    list_display = ['id','username','post']
+    list_display = ['id','username','post','liked_status']
     
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ['id','author','post','text','created_at','updated_at']
+    
+@admin.register(Replay)
+class ReplayAdmin(admin.ModelAdmin):
+    list_display = ['id','author','post','comment', 'replay','created_at','updated_at']

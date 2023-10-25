@@ -53,7 +53,7 @@
                     <div class="second_halve mt-3">
                         <ul class="navigation">
 
-                            <li class="nav_link"> <a href class="nav_l"><i class="bi bi-chat-square-dots-fill"></i>
+                            <li class="nav_link"> <a href="{% url 'chat:chat_index' %}" class="nav_l"><i class="bi bi-chat-square-dots-fill"></i>
                                     Chat</a> </li>
                             <li class="nav_link"><a href class="nav_l"><i class="bi bi-bell-fill"></i>
                                     Notification</a></li>
@@ -64,7 +64,7 @@
                     </div>
                     <hr>
                     <div class="d-flex justify-content-center">
-                        <a href="/profile/" class="btn btn-outline-success mb-4"><i class="bi bi-eye-fill"></i> View
+                        <a href="{% url 'profile' request.user.id %}" class="btn btn-outline-success mb-4"><i class="bi bi-eye-fill"></i> View
                             Profile</a>
 
                     </div>
@@ -88,20 +88,18 @@
 
                             <div class="col-2">
                                 <img style="height: 60px; width:60px; border-radius:50%;border-color:#ECECEC; "
-                                    src="{{ request.user.profile.profileimg.url }}" class="profile_img mt-1"
+                                    src="{{ d.profile.profileimg.url }}" class="profile_img mt-1"
                                     alt="user profile images">
 
                             </div>
 
                             <div class="col-9 mt-2">
-                                <a href="">
+                                <a href="{% url 'profile' d.id %}">
                                     <h5>{{ d.get_full_name }}</h5>
                                 </a>
                             </div>
 
-                            <div class="col-1 mt-3">
-                                <span class="add_btn"><i class="fa-solid fa-plus"></i></span>
-                            </div>
+                            
                         </div>
 
                     </div>
@@ -166,6 +164,7 @@
 
             <!-- Post Design Start -->
             <div class="row" style="overflow: hidden;">
+                
 
                 {% for p in posts %}
 
@@ -183,7 +182,7 @@
                                         <div class="row">
                                             <div class="col-10">
                                                 <div class="title h5">
-                                                    <a href="#" class=""><b>{{p.author.get_full_name}}</b></a>
+                                                    <a href="{% url 'profile' p.authorprofile.user.id %}" class=""><b>{{p.author.get_full_name}}</b></a>
                                                 </div>
                                             </div>
 
@@ -191,10 +190,10 @@
                                             {% if request.user.id == p.author.id or request.user.is_staff == True %}
 
 
-
+                                             <!-- edit delete -->
                                             <div class="col-2">
                                                 <div class="postedit">
-                                                    <a class="me-3" href="#" title="Edit">
+                                                    <a class="me-3" href="{% url 'postedit' p.id %}" title="Edit">
                                                         <i class="fa-regular fa-pen-to-square fa-xs"></i>
                                                     </a>
                                                     <a href="/postdelete?post_id={{p.id}}" title="Delete">
@@ -225,87 +224,37 @@
                                 <div class="">
 
                                     <div class="my-4 flex space-x-4 lg:font-bold" style="display: inline;">
+
                                         <a href="/like?post_id={{p.id}}" class="flex items-center space-x-2" style="display: inline;">
                                             <div class="rounded-full text-black" style="display: inline;">
 
                                                 <!-- love icon START-->
+                                                
+                                                {% if liked %}
+                                                <i class="fa-solid fa-heart fa-lg mt-4" id="love" style="color: #c82828;"></i>
+
+                                                {% else %}
                                                 <i class="fa-regular fa-heart fa-lg mt-4" id="love" style="color: #c82828;"></i>
+                                                    
+                                                {% endif %}
+                                                    
+
+                                                
+                                                
                                                 <!-- love icon ENd-->
 
-                                                {% if p.total_like >= 1 %}
                                                 
-
-                                                {% endif %}
                                             </div>                                           
                                         </a>
                                         <h6 class="ms-3" style="display: inline;">{{p.total_like}}</h6>
+
+                                        <a href="{% url 'show_comment' p.id %}"><i class="fa-regular fa-comment fa-lg  ms-5"></i></a>
+                                        <h6 class="ms-3" style="display: inline;">{{p.total_comment}}</h6>
                                         
                                     </div>
                                 </div>
                             </div>
-                            <div class="post-footer">
-
-                                <!-- comment start -->
-                                <form action="/comment/?post_id={{p.id}}" method="POST">{% csrf_token %}
-                                    <div class="input-group">
-                                        <input class="form-control" name="comment" placeholder="Add a comment" type="text">
-                                        <span class="input-group-addon">
-                                            <button class="btn btn-success px-2" type="submit" id="button-addon2"><i class="fa-regular fa-paper-plane"></i> Comment</button>
-    
-                                        </span>
-                                    </div>
-                                </form>
-
-                                <ul class="comments-list">
-                                    <li class="comment">
-                                        <a class="pull-left" href="#">
-                                            <img class="avatar" src="https://bootdey.com/img/Content/user_1.jpg" alt="avatar">
-                                        </a>
-                                        <div class="comment-body">
-                                            <div class="comment-heading">
-                                                <h4 class="user">Gavino Free</h4>
-                                                <h5 class="time">5 minutes ago</h5>
-                                            </div>
-                                            <p>Sure, oooooooooooooooohhhhhhhhhhhhhhhh</p>
-                                        </div>
-                                        <ul class="comments-list">
-                                            <li class="comment">
-                                                <a class="pull-left" href="#">
-                                                    <img class="avatar" src="https://bootdey.com/img/Content/user_3.jpg" alt="avatar">
-                                                </a>
-                                                <div class="comment-body">
-                                                    <div class="comment-heading">
-                                                        <h4 class="user">Ryan Haywood</h4>
-                                                        <h5 class="time">3 minutes ago</h5>
-                                                    </div>
-                                                    <p>Relax my friend</p>
-                                                </div>
-                                            </li> 
-                                            <li class="comment">
-                                                <a class="pull-left" href="#">
-                                                    <img class="avatar" src="https://bootdey.com/img/Content/user_2.jpg" alt="avatar">
-                                                </a>
-                                                <div class="comment-body">
-                                                    <div class="comment-heading">
-                                                        <h4 class="user">Gavino Free</h4>
-                                                        <h5 class="time">3 minutes ago</h5>
-                                                    </div>
-                                                    <p>Ok, cool.</p>
-                                                </div>
-                                            </li> 
-                                            <li class="comment">
-                                                <div class="input-group">
-                                                    <input class="form-control" name="replay" placeholder="Add a comment" type="text">
-                                                    <span class="input-group-addon">
-                                                        <button class="btn btn-success px-2" type="submit" id="button-addon2"><i class="fa-regular fa-paper-plane"></i> Replay</button>
-                
-                                                    </span>
-                                                </div>
-                                            </li> 
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
+                            
                             <!-- comment end -->
                         </div>
                     </div>

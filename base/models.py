@@ -48,28 +48,54 @@ class Post(models.Model):
     total_like = models.IntegerField(default=0)
     total_comment = models.IntegerField(default=0)
     
+    
     def __str__(self):
         return str(self.id)
     
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
     username = models.CharField(max_length=100, default=None)
+    liked_status = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.like_user.username
+        return self.username
     
     
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     authorprofile = models.ForeignKey(Profile, on_delete=models.CASCADE,  null=True, blank=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
-    text = models.CharField(max_length=500, null=True, blank= True)
+    text = models.CharField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     
     
     def __str__(self):
-        return self.author.username
+        return str(self.id)
     
     
+class Replay(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    authorprofile = models.ForeignKey(Profile, on_delete=models.CASCADE,  null=True, blank=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, blank=True)
+    replay = models.CharField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return str(self.id)
+    
+    
+
+class Follow(models.Model):
+    user_id = models.ForeignKey(User,on_delete=models.CASCADE, related_name="following")
+    user_id_profile = models.ForeignKey(Profile,on_delete=models.CASCADE, related_name="following_profile")
+    following_user = models.ForeignKey(User,on_delete=models.CASCADE, related_name="followers")
+    following_user_profile = models.ForeignKey(Profile,on_delete=models.CASCADE, related_name="followers_profile")
+    created = models.DateTimeField(auto_now_add=True)
+    
+    
+    def __str__(self):
+        f"{self.user_id} follows {self.following_user}"

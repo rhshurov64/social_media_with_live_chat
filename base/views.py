@@ -11,6 +11,7 @@ import uuid
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import *
+from django.db.models import Q
 
 # Create your views here.
 
@@ -18,19 +19,25 @@ from .forms import *
 def index(request):
     data = User.objects.exclude(username = request.user).exclude(username = 'admin')
     status = Post.objects.all().order_by('-updated_at')
-    print(status)
+    
     user = request.user
+    
     post = Post.objects.filter(username = user)
     total_post = len(post)
+    
+    comments = Comment.objects.all()
+    
+    
+    
     if request.method == "POST":
         user = request.user
         author = User.objects.get(username = user)
         authorprofile = Profile.objects.get(user = user)
         text = request.POST['text']
-        postimg = request.FILES.get('image', False)
+        postimg = request.FILES.get('image', None)
         post = Post.objects.create(author = author, authorprofile = authorprofile, username = user, text=text, postimg = postimg)
         
-    return render(request,'base/home.html', {'data':data, 'posts':status, 'total_post':total_post})
+    return render(request,'base/home.html', {'data':data, 'posts':status, 'total_post':total_post, 'comments': comments})
 
 
 
@@ -80,15 +87,17 @@ def like(request):
     post = Post.objects.get(id=post_id)
 
     like_filter = Like.objects.filter(post_id=post_id, username=username).first()
-
+    liked = Like.objects.filter(Q(post=post_id ) & Q(liked_status = True)).first()
     if like_filter == None:
         new_like = Like.objects.create(post_id=post_id, username=username)
+        new_like.liked_status = True
         new_like.save()
         post.total_like = post.total_like+1
         post.save()
-        return redirect('/')
+        return redirect('/', {'liked':liked})
     else:
         like_filter.delete()
+        like_filter.like_status = False
         post.total_like = post.total_like-1
         post.save()
         return redirect('/')
@@ -99,6 +108,21 @@ def postdelete(request):
     post_id = request.GET.get('post_id')
     post = Post.objects.get(id=post_id)
     post.delete()
+    return redirect('/')
+
+@login_required(login_url='/login/')
+def comment_delete(request):
+    cmnt_id = request.GET.get('cmnt_id')
+    cmnt = Comment.objects.get(id = cmnt_id)
+    cmnt.delete()
+    return redirect('/')
+
+
+@login_required(login_url='/login/')
+def replay_delete(request):
+    replay_id = request.GET.get('replay_id')
+    replay = Replay.objects.get(id = replay_id)
+    replay.delete()
     return redirect('/')
 
 
@@ -191,19 +215,17 @@ def setting(request):
 
 
 @login_required(login_url='/login/')
-def profile(request):
-    userd = request.user
-
-    user_data = User.objects.filter(pk = userd.id)
-    profile_data = Profile.objects.filter(user=user_data)
-    posts = Post.objects.filter(username = userd)
+def profile(request, id):
+    user_data = User.objects.get(id = id)
+    profile_data = Profile.objects.get(user = user_data)
+    posts = Post.objects.filter(author = user_data)
     post_length = len(posts)
     
     
     
     context = {
         "udata" : user_data,
-        "pdata" : profile_data,
+        "profile_data" : profile_data,
         'posts' : posts,
         'post_length' : post_length,
     }
@@ -233,27 +255,111 @@ def update(request,id):
     return render(request,'base/update.html',{'form':fm})
 
 
-# def test(request):
-#     if request.method == 'POST':
-#         fm1 = FormOne(request.POST)
-#         if fm1.is_valid():
-#             name = fm1.cleaned_data['name']
-#             email = fm1.cleaned_data['email']
-#             data = ModelOne.objects.create(name=name, email = email)     
-#     else:
-#         fm1 = FormOne()    
-#     return render(request, 'base/test.html')
+@login_required(login_url='/login/')
+def postedit(request, id):
+    if request.method =='POST':
+        pi = Post.objects.get(pk= id)
+        fm = PostForm(request.POST, request.FILES, instance=pi)
+        if fm.is_valid():
+            fm.save()
+    else:
+        pi = Post.objects.get(pk= id)
+        fm = PostForm(instance=pi)
+    return render(request,'base/postedit.html',{'form':fm})
 
 
-def comment(request):
+
+@login_required(login_url='/login/')
+def commentedit(request, id):
+    if request.method =='POST':
+        pi = Comment.objects.get(pk= id)
+        fm = CommentForm(request.POST, instance=pi)
+        if fm.is_valid():
+            fm.save()
+    else:
+        pi = Comment.objects.get(pk= id)
+        fm = CommentForm(instance=pi)
+    return render(request,'base/commentedit.html',{'form':fm})
+
+
+@login_required(login_url='/login/')
+def replayedit(request, id):
+    if request.method =='POST':
+        pi = Replay.objects.get(pk= id)
+        fm = ReplayForm(request.POST, instance=pi)
+        if fm.is_valid():
+            fm.save()
+    else:
+        pi = Replay.objects.get(pk= id)
+        fm = ReplayForm(instance=pi)
+    return render(request,'base/replayedit.html',{'form':fm})
+
+
+
+
+
+
+
+@login_required(login_url='/login/')
+def comment(request, id):
     if request.method == 'POST':
         text = request.POST['comment']
-        post_id = request.POST['post_id']
-        print(post_id)
         user = request.user
         author = User.objects.get(username = user)
         authorprofile = Profile.objects.get(user = user)
-        post = Post.objects.filter(id = post_id)
-        comment = Comment.objects.create(author= author, authorprofile =authorprofile, post = post, text = text)
-        
-    return redirect('index')
+        post_obj = Post.objects.get(id = id)
+        comment = Comment.objects.create(author= author, authorprofile =authorprofile, post = post_obj, text = text)
+        if comment:
+            post_obj.total_comment= post_obj.total_comment + 1
+            post_obj.save()
+    return HttpResponseRedirect(f'show_comment/{id}')
+
+
+@login_required(login_url='/login/')
+def show_comment(request, id):
+    post = Post.objects.filter(id = id).order_by('-created_at')
+    comments = Comment.objects.filter(post__in= post).order_by('-created_at')
+    return render(request, 'base/comment.html', {'posts':post, 'comments': comments})
+
+
+
+@login_required(login_url='/login/')
+def show_replay(request, pid, cid):
+    
+    post = Post.objects.filter(id = pid)
+    comments = Comment.objects.filter(id= cid)
+    replays = Replay.objects.filter(comment__in = comments)
+    
+    if request.method == 'POST':
+        replay = request.POST['replay']
+        user = request.user
+        author = User.objects.get(username = user)
+        authorprofile = Profile.objects.get(user = user)
+        posts = Post.objects.get(id = pid)
+        cmnt = Comment.objects.get(id = cid)
+        replay = Replay.objects.create(author= author, authorprofile =authorprofile,post = posts, comment = cmnt, replay = replay)
+        if replay:
+            posts.total_comment= posts.total_comment + 1
+            posts.save()
+    
+    return render(request, 'base/replay.html', {'posts':post, 'comments': comments, 'replays':replays})
+    
+
+def newprofile(request, id):
+    user_data = User.objects.get(id = id)
+    profile_data = Profile.objects.get(user = user_data)
+    posts = Post.objects.filter(author = user_data)
+    post_length = len(posts)
+    
+    
+    
+    context = {
+        "udata" : user_data,
+        "profile_data" : profile_data,
+        'posts' : posts,
+        'post_length' : post_length,
+    }
+
+
+    
+    return render(request,'base/newprofile.html',context)

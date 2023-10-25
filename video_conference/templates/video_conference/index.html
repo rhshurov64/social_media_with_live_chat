@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Video Conference</title>
+  <body>
+    <div class="dashboard">
+        <h1>Welcome, {{request.user.get_full_name}}!</h1>
+        <!-- create a "New Meeting" button -->
+        <a href="{% url 'video_conference:video_call' %}" class="button">New Meeting</a>
+        <a href="{% url 'video_conference:join' %}" class="button">Join Meeting</a>
+    </div>
+  </body>
+</head>
+</html>
+    
+{% endblock content %}
+    
