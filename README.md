@@ -1,8 +1,7 @@
-# social_project
- a social media project, where verified registered users can do post, like comment, comment replay with image or without image. Each user has separate profile. User can also do live chat with users and 
-see the offline online status. User will get notification for every message. I have used Django channels for the live chat and notification.
+# Soical Media Project With Live Chat and Video Conference System
 
-**----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------**
+
+**-----------------------------------------------------------------------------------------**
 _**Introduction**_
 
 **I am developing a django app for complete and fully functional social  media system with live chat and video conferecing system, where new user can do registraion and need to 
@@ -13,7 +12,7 @@ people and make new frineds by following them. User can also unfollow friends. U
 user can filter the online and offline users and can do real time chatting. I have also implement a video conference system by used Zegocloud API where users can create new meeting
 also can join other meeting by the link**
 
-**--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------**
+**--------------------------------------------------------------------------------------------**
 
 **User Requirements**
 1.	User Authentication and Authorization (Registraion, Email Verification, Login, Permissions)
@@ -25,6 +24,8 @@ also can join other meeting by the link**
 7.	Live Chatting Management
 8.	Notification Management
 9.	Video Conference System 
+
+**-----------------------------------------------------------------------------------------**
 
 **System Requirement**
 1.	User Registration:
@@ -64,6 +65,8 @@ also can join other meeting by the link**
 •	The system supports multi-user video conferences.
 •	User can turn on/off camera and mike
 
+**-----------------------------------------------------------------------------------------**
+
 **Functional Requirements:**
 1.	The user needs to verify the mail address, a Verification link will be sent to the email address.
 2.	Only email Verified users can log in.
@@ -78,6 +81,8 @@ also can join other meeting by the link**
 11.	User will get notifications for actions related to their profile.
 12.	The user can turn on/off the camera and mike in a video conference.
 13.	Users can search for other users, posts, or content using keywords, hashtags, or specific user names.
+
+**-----------------------------------------------------------------------------------------**
 
 **Non-Functional Requirements:**
 Performance:
