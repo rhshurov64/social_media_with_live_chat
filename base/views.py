@@ -12,6 +12,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .forms import *
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from django.http import FileResponse
 
 # Create your views here.
 
@@ -87,20 +89,19 @@ def like(request):
     post = Post.objects.get(id=post_id)
 
     like_filter = Like.objects.filter(post_id=post_id, username=username).first()
-    liked = Like.objects.filter(Q(post=post_id ) & Q(liked_status = True)).first()
     if like_filter == None:
         new_like = Like.objects.create(post_id=post_id, username=username)
         new_like.liked_status = True
         new_like.save()
         post.total_like = post.total_like+1
         post.save()
-        return redirect('/', {'liked':liked})
+        return redirect('/', {'liked':like_filter})
     else:
         like_filter.delete()
         like_filter.like_status = False
         post.total_like = post.total_like-1
         post.save()
-        return redirect('/')
+        return redirect('/', )
 
 
 @login_required(login_url='/login/')
@@ -113,9 +114,10 @@ def postdelete(request):
 @login_required(login_url='/login/')
 def comment_delete(request):
     cmnt_id = request.GET.get('cmnt_id')
+    post_id = request.GET.get('post_id')
     cmnt = Comment.objects.get(id = cmnt_id)
     cmnt.delete()
-    return redirect('/')
+    return redirect(f'show_comment/{post_id}/')
 
 
 @login_required(login_url='/login/')
@@ -131,7 +133,7 @@ def profile_post_delete(request):
     post_id = request.GET.get('post_id')
     post = Post.objects.get(id=post_id)
     post.delete()
-    return redirect('/profile/')
+    return redirect('/')
 
 
 
@@ -189,8 +191,6 @@ def account_verify(request,token):
     messages.success(request,'Your Account is verifed, Please Complete your Profile!')
     return render(request, 'base/render.html')
 
-
-
     
 @login_required(login_url='/login/')
 def setting(request):
@@ -223,6 +223,7 @@ def profile(request, id):
     
     
     
+    
     context = {
         "udata" : user_data,
         "profile_data" : profile_data,
@@ -245,7 +246,7 @@ def suggestion(request):
 def update(request,id):
     if request.method =='POST':
         pi = Profile.objects.get(pk= id)
-        fm = ProfileForm(request.POST,instance=pi)
+        fm = ProfileForm(request.POST, request.FILES, instance=pi)
         if fm.is_valid():
             fm.save()
     else:
@@ -253,6 +254,21 @@ def update(request,id):
         fm = ProfileForm(instance=pi)
         
     return render(request,'base/update.html',{'form':fm})
+
+
+
+def name_edit(request,id):
+    if request.method =='POST':
+        pi = User.objects.get(pk= id)
+        fm = UserDataForm(request.POST, instance=pi)
+        if fm.is_valid():
+            fm.save()
+    else:
+        pi = User.objects.get(pk= id)
+        fm = UserDataForm(instance=pi)
+        
+    return render(request,'base/nameedit.html',{'form':fm})
+
 
 
 @login_required(login_url='/login/')
@@ -297,9 +313,6 @@ def replayedit(request, id):
 
 
 
-
-
-
 @login_required(login_url='/login/')
 def comment(request, id):
     if request.method == 'POST':
@@ -320,7 +333,6 @@ def show_comment(request, id):
     post = Post.objects.filter(id = id).order_by('-created_at')
     comments = Comment.objects.filter(post__in= post).order_by('-created_at')
     return render(request, 'base/comment.html', {'posts':post, 'comments': comments})
-
 
 
 @login_required(login_url='/login/')
@@ -345,21 +357,42 @@ def show_replay(request, pid, cid):
     return render(request, 'base/replay.html', {'posts':post, 'comments': comments, 'replays':replays})
     
 
-def newprofile(request, id):
-    user_data = User.objects.get(id = id)
-    profile_data = Profile.objects.get(user = user_data)
-    posts = Post.objects.filter(author = user_data)
-    post_length = len(posts)
+def blocklist(request, bid):
+    user = request.user.username
+    author = User.objects.get(username = user)
+    authorprofile = Profile.objects.get(user = author)
     
-    
-    
-    context = {
-        "udata" : user_data,
-        "profile_data" : profile_data,
-        'posts' : posts,
-        'post_length' : post_length,
-    }
+    blocked_user = User.objects.get(id = bid)
+    blocked_user_profile = Profile.objects.get(user = blocked_user)
+    blk = Block.objects.create(author = author,authorprofile= authorprofile, blocked_user =blocked_user,blocked_user_profile=blocked_user_profile, is_block= True)
+
+    return redirect('/')
 
 
+def unblock(request, block_user_id):
+    user = request.user
+    blocked_user = User.objects.get(id = block_user_id)
+    unblock_user = Block.objects.get(Q(author = user) & Q(blocked_user = blocked_user))
+    if unblock_user:
+        unblock_user.delete()
+    return redirect('showblocklist')
+
+def showblocklist(request):
+    author = request.user
+    users = Block.objects.filter(author = author)
+    return render(request, 'base/blocklist.html', {'users' : users, })
     
-    return render(request,'base/newprofile.html',context)
+    
+def download_image(request, image_id):
+    image = get_object_or_404(Post, pk=image_id)
+    image_path = image.postimg.path
+    response = FileResponse(open(image_path, 'rb'))
+    return response
+
+
+
+def suggesions_search(request):
+    search_text = request.GET.get('search_box')
+    users_data = User.objects.filter(Q(first_name__contains=search_text) | Q(last_name__contains=search_text))
+    return render(request,'base/suggesionsresult.html',{'data':users_data})
+    

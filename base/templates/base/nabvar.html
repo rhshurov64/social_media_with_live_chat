@@ -96,7 +96,7 @@
           <ul class="dropdown-menu me-5" aria-labelledby="dropdownMenuButton2">
             <li><a class="dropdown-item" href="/index/"> <i class="fa-solid fa-bars me-2"></i>Dashboard</a></li>
             <li><a class="dropdown-item" href="{% url 'profile' request.user.id %}"><i class="fa-solid fa-user me-2"></i>Profile</a></li>
-            <li><a class="dropdown-item" href="{% url 'profile' request.user.id %}"><i class="fa-solid fa-ban me-2"></i>Blocklist</a></li>
+            <li><a class="dropdown-item" href="{% url 'showblocklist' %}"><i class="fa-solid fa-ban me-2"></i>Blocklist</a></li>
             <!-- <li><a class="dropdown-item" href="/setting/">Setting</a></li> -->
             <li>
               <hr class="dropdown-divider">

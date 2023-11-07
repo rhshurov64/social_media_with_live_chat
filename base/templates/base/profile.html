@@ -55,7 +55,9 @@
                 <div class="card">
                     <div class="card-body">
                         {% if request.user.id != profile_data.user.id %}
-                        <a class="btn btn-outline-danger" style="align-self: center;" href=""><i class="fa-solid fa-ban me-2"></i>Block</a>
+                        <a class="btn btn-outline-danger" style="align-self: center;" href="{% url 'blocklist' profile_data.user.id %}"><i class="fa-solid fa-ban me-2"></i>Block</a>
+                        {% else %}
+                        <a class="btn btn-outline-info" style="align-self: center;" href="{% url 'update' profile_data.id %}"><i class="fas fa-edit me-2"></i>Edit Profile</a>
                         {% endif %}
                         <div class="d-flex flex-column align-items-center text-center">
                             
@@ -71,7 +73,11 @@
                             </div>
 
                             <div class="mt-0">
-                                <h4>{{ profile_data.user.get_full_name }}</h4>
+                                <h4 class="d-inline me-2">{{ profile_data.user.get_full_name }}</h4>
+
+                                {% if request.user.id == profile_data.user.id %}
+                                <a class="d-inline" href="{% url 'name_edit' profile_data.user.id  %}"><i class="fas fa-edit me-2 d-inline"></i></a>
+                                {% endif %}
                                 <p class="text-secondary mb-1">{{ profile_data.bio }}</p>
                                 <p class="text-muted font-size-sm">{{ profile_data.location }}, {{profile_data.country }}</p>
                                 <hr>
@@ -139,8 +145,6 @@
             <div class="col-md-8">
                 
                 {% if request.user.id == profile_data.user.id %}
-                    
-                
                     
                 <div class="card mb-3">
                     <div class="card-body">
@@ -273,7 +277,7 @@
 
                                                 <div class="col-2">
                                                     <div class="postedit">
-                                                        <a class="me-3" href="#" title="Edit">
+                                                        <a class="me-3" href="{% url 'postedit' p.id %}" title="Edit">
                                                             <i class="fa-regular fa-pen-to-square fa-xs"></i>
                                                         </a>
                                                         <a href="/profile_post_delete?post_id={{p.id}}" title="Delete">
@@ -325,6 +329,11 @@
                                             <h6 class="ms-3" style="display: inline;">{{p.total_comment}}</h6>
 
                                         </div>
+                                        {% if p.postimg %}
+                                        
+                                        <a style="margin-left: 50px;" title="Download" href="{% url 'download_image' p.id %}" download><b><i class="fa-solid fa-download fa-lg"></i></b></a>
+
+                                        {% endif %}
                                     </div>
                                 </div>
                                 

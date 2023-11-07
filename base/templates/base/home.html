@@ -18,11 +18,8 @@
 
                 <div class="first_halve">
                     <div class="user_img">
-                        <header class="profile_header">
-                            <img src="https://th.bing.com/th/id/OIP.61YIIyvWOY5d9dpX2l66qAHaCP?w=350&h=106&c=7&r=0&o=5&pid=1.7"
-                                class="prof_header_img" alt="header">
-                        </header>
-                        <img src="{{ request.user.profile.profileimg.url }}" class="profile_img"
+                        
+                        <img src="{{ request.user.profile.profileimg.url }}" class="profile_img mt-3"
                             alt="user profile images">
                     </div>
                     <div class="user_about">
@@ -229,15 +226,15 @@
                                             <div class="rounded-full text-black" style="display: inline;">
 
                                                 <!-- love icon START-->
-                                                
-                                                {% if liked %}
-                                                <i class="fa-solid fa-heart fa-lg mt-4" id="love" style="color: #c82828;"></i>
 
-                                                {% else %}
+
+                                                
+                                                
                                                 <i class="fa-regular fa-heart fa-lg mt-4" id="love" style="color: #c82828;"></i>
+
+                                                
                                                     
-                                                {% endif %}
-                                                    
+                                                
 
                                                 
                                                 
@@ -252,6 +249,12 @@
                                         <h6 class="ms-3" style="display: inline;">{{p.total_comment}}</h6>
                                         
                                     </div>
+                                    
+                                    {% if p.postimg %}
+                                        
+                                    <a title="Download" style="margin-left: 50px;" href="{% url 'download_image' p.id %}" download><i class="fa-solid fa-download fa-lg"></i></a>
+
+                                    {% endif %}
                                 </div>
                             </div>
                             
@@ -271,6 +274,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 

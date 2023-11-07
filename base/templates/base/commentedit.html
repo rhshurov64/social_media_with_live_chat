@@ -3,24 +3,25 @@
 
 
 {% block content %}
-
+<button style="width: 140px; height:40px; margin: 10px 10px;" class="btn btn-sm btn-outline-primary" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
 <div class="container">
     <div class="row">
+        
         <div class="col-4"></div>
         <div class="col-4 p-5 mt-4" style="background-color: #F5F5F5;">
             <div class="row">
-                <div class="col">
+                <div class="col text-center">
                     <h6 class="alert alert-sm alert-info">Edit Comment</h6>
                     <form action="" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <p class="ms-3">{{form}}</p>
                         
-                        <input type="submit" value="Save" class="btn btn-sm btn-success mt-5 ms-5">
-                        <a href="{% url 'index' %}" class="btn btn-sm btn-danger mt-5 ms-2">Back To Home</a>
+                        <input type="submit" value="Save" class="btn btn-sm btn-success px-5 mt-5">
+                        <!-- <a href="{% url 'index' %}" class="btn btn-sm btn-danger mt-5 ms-2">Back To Home</a> -->
             
                     </form>
                     
-            
+                    
             
                 </div>  
             </div>

@@ -1,20 +1,39 @@
 {% extends 'base/base.html' %}
 
 {% block content%} 
-<div class="row">
-    <div class="col">
-        <h6 class="alert alert-info">Update Data</h6>
-        <form action="" method="POST">
+
+<style>
+
+.sss {
+  background-color: #fff;
+  border-top: 5px solid #39cb58;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0 2.5px 5px #ccc;
+
+}
+  
+</style>
+<button style="width: 140px; height:40px; margin: 10px 10px;" class="btn btn-sm btn-outline-primary" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i> Go Back</button>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4 sss">
+            <h4 class="text-center my-3">Edit Profile</h4>
+            <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{form.as_p}}
-            <input type="submit" value="Save" class="btn btn-danger">
-            <a href="{% url 'index' %}" class="btn btn-danger ">Back To Home</a>
+            <input type="submit" value="Save" class="btn btn-sm btn-success px-4 my-3 ms-5 me-5">
+            <a href="{% url 'index' %}" class="btn btn-sm btn-danger ">Back To Home</a>
 
         </form>
-        
 
-
-    </div>  
+        </div>
+        <div class="col-4"></div>
+    </div>
 </div>
+
+
+
 
 {% endblock content%}

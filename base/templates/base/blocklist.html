@@ -1,0 +1,122 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<style>
+    .form-main {
+        margin-top: 15px;
+    }
+   
+      
+    .section-main {
+        margin-top:40px;
+        padding: 20px 0;
+        
+    }
+   
+    
+ 
+    
+</style>
+
+
+
+
+
+<div class="container my-3">
+    <div class="row">
+        <!-- Search Panel -->
+        
+          
+          
+          <div class="section-main">
+            <div class="" role="main">
+              <div class="row">
+                  <form action="" method="GET" class="form-main  form-inline nofloat-xs">
+                    <div class="form-group form-input-fields form-group-lg has-feedback">
+                        <div class="input-group mb-3">
+                            <input type="text" style="width: 1145px;" class="search_box" placeholder=" Search For People" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-success px-4" type="button" id="button-addon2"><i class="fa-solid fa-user"></i>  Search</button>
+                            </div>
+                        </div>
+                    </div>
+                  </form>
+              </div>
+          
+          
+              <!--rest of page content -->
+          
+            </div>
+          </div>
+
+
+        <!-- Search Panel End -->
+
+        {% for d in users %}
+        <div class="col-5">
+            <div class="row">
+
+                <div class="col-2">
+                    <img style="height: 66px; width:66px; border-radius:50%;border-color:#ECECEC; "
+                        src="{{ d.blocked_user_profile.profileimg.url }}" class="profile_img mt-1" alt="user profile images">
+        
+                </div>
+        
+                <div class="col-10 ">
+                    <!-- <a href="{% url 'profile' d.blocked_user_profile.user.id %}"> -->
+                        <h6>{{ d.blocked_user.get_full_name }}</h6>
+                        <a href="{% url 'unblock' d.blocked_user_profile.user.id %}" class="btn btn-sm btn-primary ms-1 px-2"">Unblock</a>
+                    <!-- </a> -->
+                    
+                    <!-- javascrip id  id="{{d}}follow-button -->
+
+
+                </div>
+        
+                
+        
+            </div>
+
+
+        </div>
+        <hr>
+       
+        {% endfor %}
+    </div>
+
+</div>
+
+{% for d in users %}
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Check if the button state is stored in local storage
+        var isFollowing = localStorage.getItem('isFollowing') === 'true';
+
+        // Set the initial button text and style based on the stored state
+        if (isFollowing) {
+            $("#{{d}}follow-button").text('Following').addClass('btn-success');
+        }
+
+        $("#{{d}}follow-button").click(function() {
+            // Toggle the button state
+            isFollowing = !isFollowing;
+
+            // Update the button text and style
+            if (isFollowing) {
+                $("#{{d}}follow-button").text('Following').addClass('btn-success');
+            } else {
+                $("#{{d}}follow-button").text('+ Follow').removeClass('btn-success');
+            }
+
+            // Store the button state in local storage
+            localStorage.setItem('isFollowing', isFollowing);
+        });
+    });
+</script>
+{% endfor %}
+{% endblock content %}

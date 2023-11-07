@@ -26,3 +26,7 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(Replay)
 class ReplayAdmin(admin.ModelAdmin):
     list_display = ['id','author','post','comment', 'replay','created_at','updated_at']
+    
+@admin.register(Block)
+class BlockAdmin(admin.ModelAdmin):
+    list_display = ['id','author','blocked_user','is_block']

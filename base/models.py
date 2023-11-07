@@ -98,4 +98,15 @@ class Follow(models.Model):
     
     
     def __str__(self):
-        f"{self.user_id} follows {self.following_user}"
+        return str(f"{self.user_id} follows {self.following_user}")
+        
+        
+class Block(models.Model):
+    author = models.ForeignKey(User,on_delete=models.CASCADE, related_name="user")
+    authorprofile = models.ForeignKey(Profile,on_delete=models.CASCADE, default=None, related_name="authorprofile")
+    blocked_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blocked_user")
+    blocked_user_profile = models.ForeignKey(Profile,on_delete=models.CASCADE, default=None, related_name="blocked_user_profile")
+    is_block = models.BooleanField(default=False)
+    
+    def __str__(self):
+       return str(f"{self.author} blocked {self.blocked_user}")
