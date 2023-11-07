@@ -1,8 +1,7 @@
 # Soical Media Project With Live Chat and Video Conference System
 
 
-**-----------------------------------------------------------------------------------------**
-_**Introduction**_
+**----------------------------------Introduction------------------------------------------**
 
 **I am developing a django app for complete and fully functional social  media system with live chat and video conferecing system, where new user can do registraion and need to 
 verifid account by email verification.  After verify the account user will redirect to profile setup page. User can submit their personal information for the profiel. With this
@@ -12,9 +11,11 @@ people and make new frineds by following them. User can also unfollow friends. U
 user can filter the online and offline users and can do real time chatting. I have also implement a video conference system by used Zegocloud API where users can create new meeting
 also can join other meeting by the link**
 
-**--------------------------------------------------------------------------------------------**
 
-**User Requirements**
+
+
+**----------------------------------User Requirements-----------------------------------**
+
 1.	User Authentication and Authorization (Registraion, Email Verification, Login, Permissions)
 2.	Profile Management
 3.	Connection/Friend Management
@@ -23,11 +24,12 @@ also can join other meeting by the link**
 6.	Follow Follwer Management
 7.	Live Chatting Management
 8.	Notification Management
-9.	Video Conference System 
+9.	Video Conference System
 
-**-----------------------------------------------------------------------------------------**
 
-**System Requirement**
+
+**--------------------------------System Requirement-------------------------------------**
+
 1.	User Registration:
 •	Multiple Users can create accounts using their valid email.
 •	User needs to provide First Name, Last Name, and Username
@@ -65,9 +67,10 @@ also can join other meeting by the link**
 •	The system supports multi-user video conferences.
 •	User can turn on/off camera and mike
 
-**-----------------------------------------------------------------------------------------**
 
-**Functional Requirements:**
+
+**----------------------------------Functional Requirements--------------------------**
+
 1.	The user needs to verify the mail address, a Verification link will be sent to the email address.
 2.	Only email Verified users can log in.
 3.	The username must be unique.
@@ -82,9 +85,9 @@ also can join other meeting by the link**
 12.	The user can turn on/off the camera and mike in a video conference.
 13.	Users can search for other users, posts, or content using keywords, hashtags, or specific user names.
 
-**-----------------------------------------------------------------------------------------**
 
-**Non-Functional Requirements:**
+
+**-----------------------------Non-Functional Requirements---------------------------**
 Performance:
 •	The system has the ability to handle multiple users.
 Security:
