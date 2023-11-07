@@ -14,6 +14,16 @@ also can join other meeting by the link**
 
 
 
+**---------------------------------Technology--------------------------------**
+
+**Front-End**: HTML-5, CSS-3, Bootstrap, Jquery
+**Backend**: Django MVT, Django-channels, Signals, WebRTC,
+**Database**: Sqlite
+
+
+
+
+
 **----------------------------------User Requirements-----------------------------------**
 
 1.	User Authentication and Authorization (Registraion, Email Verification, Login, Permissions)
@@ -88,6 +98,7 @@ also can join other meeting by the link**
 
 
 **-----------------------------Non-Functional Requirements---------------------------**
+
 Performance:
 •	The system has the ability to handle multiple users.
 Security:
