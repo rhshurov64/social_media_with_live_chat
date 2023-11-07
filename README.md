@@ -17,7 +17,9 @@ also can join other meeting by the link**
 **---------------------------------Technology--------------------------------**
 
 **Front-End**: HTML-5, CSS-3, Bootstrap, Jquery
+
 **Backend**: Django MVT, Django-channels, Signals, WebRTC,
+
 **Database**: Sqlite
 
 
@@ -101,8 +103,10 @@ also can join other meeting by the link**
 
 Performance:
 •	The system has the ability to handle multiple users.
+
 Security:
 •	Secure user authentication and authorization mechanisms to protect user accounts and personal information.
 •	Only verified user can login and see others profile.
+
 Data Backup and Recovery:
 •	All the data will be saved in database.
