@@ -30,19 +30,14 @@
                                 <span class="about_profile">
                                     
                                     {% if total_post == 0 %}
-                                    <h5>0 |</h5>Post
+                                    <p>Total Post: 0 </p>
 
                                     {% elif total_post >= 0 %}
-                                    <h5>{{total_post}} |</h5>Post
+                                    <p>Total Post: {{total_post}} </p>
                                     {% endif %}
                                         
                                 </span>
-                                <span class="about_profile">
-                                    <h5>0</h5>Followers
-                                </span>
-                                <span class="about_profile">
-                                    <h5>| 0</h5>Following
-                                </span>
+                                
                             </div>
 
                     </div>
@@ -52,10 +47,9 @@
 
                             <li class="nav_link"> <a href="{% url 'chat:chat_index' %}" class="nav_l"><i class="bi bi-chat-square-dots-fill"></i>
                                     Chat</a> </li>
-                            <li class="nav_link"><a href class="nav_l"><i class="bi bi-bell-fill"></i>
+                            <li class="nav_link"><a href class="nav_l"><i class="fa-solid fa-bell" style="color: #0a5ef0;"></i>
                                     Notification</a></li>
-                            <li class="nav_link"><a href class="nav_l"><i class="bi bi-gear-fill"></i>
-                                    Setting</a></li>
+                            <li class="nav_link"><a href="{% url 'video_conference:home' %}" class="nav_l"><i class="fa-solid fa-video" style="color: #0a68ff;"></i> Video Conference</a></li>
 
                         </ul>
                     </div>
@@ -124,6 +118,8 @@
         <!-- left side end -->
 
 
+
+        
         <!-- right side start-->
 
 
@@ -141,7 +137,7 @@
                     <textarea name="text" id="" cols="92" rows="5" placeholder="Share Your Throughts!"></textarea>
                     <div class="row">
                         <div class="col-1 p-2">
-                            <input type="file" name="image" id="">
+                            <input style="font-size: 15px;" type="file" name="image" id="">
                         </div>
 
                         <div class="col-1 offset-8  p-2">
@@ -210,39 +206,32 @@
 
                             </div>
                             <div class="post-description">
-                                <p>{{p.text}}</p>
+                                <p style="margin-top: -30px;" >{{p.text}}</p>
 
                                 {% if p.postimg %}
-                                <img style="height: 400px; width:auto;" src="{{ p.postimg.url }}" alt="">
+                                
+                                <img class="mb-3" style="height: 400px; width:auto; " src="{{ p.postimg.url }}" alt="">
 
 
                                 {% endif %}
 
                                 <div class="">
 
-                                    <div class="my-4 flex space-x-4 lg:font-bold" style="display: inline;">
-
-                                        <a href="/like?post_id={{p.id}}" class="flex items-center space-x-2" style="display: inline;">
-                                            <div class="rounded-full text-black" style="display: inline;">
-
-                                                <!-- love icon START-->
-
-
-                                                
-                                                
-                                                <i class="fa-regular fa-heart fa-lg mt-4" id="love" style="color: #c82828;"></i>
-
-                                                
-                                                    
-                                                
-
-                                                
-                                                
-                                                <!-- love icon ENd-->
-
-                                                
-                                            </div>                                           
+                                    <div class="my-0 flex space-x-4 lg:font-bold" style="display: inline;">
+                                        <a href="{% url 'like_post' p.id %}" class="like-btn">
+                                        
+                                        <!-- Love Icon -->
+                                        
+                                        {% if request.user in p.likes.all %}
+                                            <i class="fa-solid fa-lg fa-heart"></i>
+                                        {% else %}
+                                            <i class="fa-regular fa-lg fa-heart"></i>
+                                        {% endif %}                                          
                                         </a>
+
+
+
+                                        
                                         <h6 class="ms-3" style="display: inline;">{{p.total_like}}</h6>
 
                                         <a href="{% url 'show_comment' p.id %}"><i class="fa-regular fa-comment fa-lg  ms-5"></i></a>

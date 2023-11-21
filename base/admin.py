@@ -4,7 +4,20 @@ from .models import *
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['id','user','bio','profileimg','location','created_at','updated_at','total_post', 'total_follower', 'total_following']
+    list_display = ['id','user','bio','profileimg','location','created_at','updated_at','total_post', 'get_followers_count', 'get_following_count']
+    
+    def get_followers_count(self, obj):
+        return obj.followers.count()
+
+    get_followers_count.short_description = 'Followers Count'
+
+    def get_following_count(self, obj):
+        return obj.following.count()
+
+    get_following_count.short_description = 'Following Count'
+    
+    
+    
     
 @admin.register(Verify_User)
 class Verify_UserAdmin(admin.ModelAdmin):
@@ -17,7 +30,7 @@ class PostAdmin(admin.ModelAdmin):
         
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
-    list_display = ['id','username','post','liked_status']
+    list_display = ['id','user','post','created_at']
     
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
@@ -30,3 +43,10 @@ class ReplayAdmin(admin.ModelAdmin):
 @admin.register(Block)
 class BlockAdmin(admin.ModelAdmin):
     list_display = ['id','author','blocked_user','is_block']
+    
+@admin.register(UserLoginHistory)
+class UserLoginHistoryAdmin(admin.ModelAdmin):
+    list_display = ['user','login_time','logout_time', 'duration_minutes']
+
+
+

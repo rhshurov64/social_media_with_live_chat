@@ -11,11 +11,12 @@ urlpatterns = [
     path('blocklist/<int:bid>/', views.blocklist, name ='blocklist'),
     path('suggestion/', views.suggestion, name ='suggestion'),
     path('update/<int:id>/', views.update, name ='update'),
+    path('profile_image_update/<int:id>/', views.profile_image_update, name ='profile_image_update'),
     path('name_edit/<int:id>/', views.name_edit, name ='name_edit'),
     path('setting/', views.setting, name ='setting'),
     path('render_/', views.rendertosetting, name ='render_'),
     path('verify/<slug:token>/', views.account_verify, name ='verify'),
-    path('like', views.like, name='like'),
+    path('like_post/<int:post_id>/', views.like_post, name='like_post'),
     path('postedit/<int:id>/', views.postedit, name='postedit'),
     path('commentedit/<int:id>/', views.commentedit, name='commentedit'),
     path('replayedit/<int:id>/', views.replayedit, name='replayedit'),
@@ -29,7 +30,12 @@ urlpatterns = [
     path('showblocklist/', views.showblocklist, name='showblocklist'),
     path('unblock/<int:block_user_id>/', views.unblock, name='unblock'),
     path('download_image/<int:image_id>/', views.download_image, name='download_image'),
+    path('reports/<str:username>/', views.reports, name='reports'),
     path('suggesions_search/', views.suggesions_search, name='suggesions_search'),
+    path('follow/<int:user_id>/', views.follow_user, name='follow_user'),
+    path('suggestion_follow_user/<int:user_id>/', views.suggestion_follow_user, name='suggestion_follow_user'),
+    path('followers/<int:user_id>/', views.follower_list, name='follower_list'),
+    path('following/<int:user_id>/', views.following_list, name='following_list'),
 ]
 
 

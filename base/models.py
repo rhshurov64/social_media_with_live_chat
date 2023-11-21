@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 
@@ -20,9 +21,9 @@ class Profile(models.Model):
     total_post = models.IntegerField(default=0)
     total_follower = models.IntegerField(default=0)
     total_following = models.IntegerField(default=0)
+    followers = models.ManyToManyField(User, related_name='followers', blank=True)
+    following = models.ManyToManyField(User, related_name='following', blank=True)
     
-    
-
     def __str__(self):
         return self.user.username
     
@@ -47,19 +48,18 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     total_like = models.IntegerField(default=0)
     total_comment = models.IntegerField(default=0)
-    
+    likes = models.ManyToManyField(User, through='Like', related_name='post_likes')
     
     def __str__(self):
         return str(self.id)
     
 class Like(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
-    username = models.CharField(max_length=100, default=None)
-    liked_status = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.username
-    
+        return str(self.user)
     
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -89,16 +89,7 @@ class Replay(models.Model):
     
     
 
-class Follow(models.Model):
-    user_id = models.ForeignKey(User,on_delete=models.CASCADE, related_name="following")
-    user_id_profile = models.ForeignKey(Profile,on_delete=models.CASCADE, related_name="following_profile")
-    following_user = models.ForeignKey(User,on_delete=models.CASCADE, related_name="followers")
-    following_user_profile = models.ForeignKey(Profile,on_delete=models.CASCADE, related_name="followers_profile")
-    created = models.DateTimeField(auto_now_add=True)
-    
-    
-    def __str__(self):
-        return str(f"{self.user_id} follows {self.following_user}")
+
         
         
 class Block(models.Model):
@@ -110,3 +101,13 @@ class Block(models.Model):
     
     def __str__(self):
        return str(f"{self.author} blocked {self.blocked_user}")
+   
+   
+
+class UserLoginHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    login_time = models.DateTimeField(default=timezone.now)
+    logout_time = models.DateTimeField(null=True, blank=True)
+    duration_minutes = models.IntegerField(default=0, null=True, blank=True)
+    
+    

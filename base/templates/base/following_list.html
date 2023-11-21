@@ -1,0 +1,64 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<div class="container my-3">
+    <div class="row mb-3">
+        
+        <p style="font-size: 20px;" class=""><a style="font-size: 20px;" href="{% url 'profile' user_profile.user.id %}">{{ user_profile.user.get_full_name }}'s</a> Following :-</p>
+
+    </div>
+    <div class="row mb-3">
+        <!-- Search Panel -->
+          <div class="section-main">
+            <div class="" role="main">
+              <div class="row">
+                  <form action="{% url 'suggesions_search' %}" method="GET" class="form-main  form-inline nofloat-xs">
+                    <div class="form-group form-input-fields form-group-lg has-feedback">
+                        <div class="input-group mb-3">
+                            <input type="text" style="width: 1145px;" name="search_box" class="search_box" placeholder=" Search For People" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-success px-4" type="submit" id="button-addon2"><i class="fa-solid fa-user"></i>  Search</button>
+                            </div>
+                        </div>
+                    </div>
+                  </form>
+              </div>
+              <!--rest of page content -->
+            </div>
+          </div>
+        <!-- Search Panel End -->
+
+    <div class="row">
+        {% for following in followings %}
+
+
+            {% for profile in profile_object %}
+
+            <div class="col-1">
+                <img style="height: 66px; width:66px; border-radius:50%;border-color:#ECECEC; "
+                    src="{{ following.profile.profileimg.url }}" class="profile_img mt-1" alt="user profile images">
+
+            </div>
+
+            <div class="col-10 mt-2">
+                <a href="{% url 'profile' following.id %}">
+                    <h6>{{ following.get_full_name }}</h6>
+                </a>
+                <span>{{ following.profile.location }}</span>
+            </div>
+            <hr class="mt-2">
+
+            {% endfor %}
+
+        
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+{% endblock content %}
+    

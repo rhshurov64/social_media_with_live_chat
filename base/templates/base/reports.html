@@ -1,0 +1,146 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="nav-overview-tab" data-bs-toggle="tab" data-bs-target="#nav-overview" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Overview</button>
+                  <button class="nav-link" id="nav-post-tab" data-bs-toggle="tab" data-bs-target="#nav-post" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Post History</button>
+                  <button class="nav-link" id="nav-engagement-tab" data-bs-toggle="tab" data-bs-target="#nav-engagement" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Others Post Engagement</button>
+                  <button class="nav-link" id="nav-usage-tab" data-bs-toggle="tab" data-bs-target="#nav-usage" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Usage History</button>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="tab-content" id="nav-tabContent">
+
+                <!-- Overview Start -->
+                <div class="tab-pane fade show active" id="nav-overview" role="tabpanel" aria-labelledby="nav-overview-tab">
+                    
+                    <div class="container table-responsive py-5"> 
+                        <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                            <th scope="col">Joined Date</th>
+                            <th scope="col">Total Post</th>
+                            <th scope="col">Total Like</th>
+                            <th scope="col">Total Comment</th>
+                            <th scope="col">Total Follower</th>
+                            <th scope="col">Total Followings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+
+                            <td>{{ request.user.date_joined|date:"d-m-Y" }}</td>
+                            <td>{{ overview.total_post }}</td>
+                            <td>{{ total_likes }}</td>
+                            <td>{{ total_comments }}</td>
+                            <td>{{ overview.followers.count }}</td>
+                            <td>{{ overview.following.count }}</td>
+                            
+                            </tr>
+                            <tr>
+                            
+                        </tbody>
+                        </table>
+                    </div>
+    
+                </div>
+
+            <!-- Post History -->
+
+
+                <div class="tab-pane fade" id="nav-post" role="tabpanel" aria-labelledby="nav-post-tab">
+                    <div class="container table-responsive py-5"> 
+                        <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">POST ID</th>
+                            <th scope="col">Created Date</th>
+                            <th scope="col">Last Updated Date</th>
+                            <th scope="col">Total Like</th>
+                            <th scope="col">Total Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in posts %}
+                            <tr>
+                            
+                            
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ post.id }}</td>
+                            <td>{{ post.created_at }}</td>
+                            <td>{{ post.updated_at }}</td>
+                            <td>{{ post.total_like }}</td>
+                            <td>{{ post.total_comment }}</td>
+                            
+
+                            </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <!-- Engagement Start -->
+                <div class="tab-pane fade" id="nav-engagement" role="tabpanel" aria-labelledby="nav-engagement-tab">z</div>
+
+
+
+                
+                <!-- User Login Logout History -->
+
+                <div class="tab-pane fade" id="nav-usage" role="tabpanel" aria-labelledby="nav-usage-tab">
+                    <div class="container table-responsive py-5"> 
+                        <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Login Time</th>
+                            <th scope="col">Logout Time</th>
+                            <th scope="col">Logged-in Duration (Minutes)</th>
+                            
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in log_history %}
+                            <tr>
+                            
+                            
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ log.login_time }}</td>
+                            <td>{{ log.logout_time }}</td>
+                            <td>{{ log.duration_minutes }}</td>
+                            
+
+                            </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  
+
+
+
+    
+{% endblock content %}
+    

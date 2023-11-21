@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect , HttpResponseRedirect
+from django.shortcuts import render, redirect , HttpResponseRedirect, get_object_or_404
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.http import HttpResponse
@@ -14,22 +14,21 @@ from .forms import *
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import FileResponse
+from django.utils import timezone
 
-# Create your views here.
+
 
 @login_required(login_url='/login/')
 def index(request):
     data = User.objects.exclude(username = request.user).exclude(username = 'admin')
     status = Post.objects.all().order_by('-updated_at')
-    
     user = request.user
-    
     post = Post.objects.filter(username = user)
     total_post = len(post)
-    
     comments = Comment.objects.all()
     
-    
+    current_user = request.user
+    profile = Profile.objects.get(user = current_user)
     
     if request.method == "POST":
         user = request.user
@@ -38,6 +37,9 @@ def index(request):
         text = request.POST['text']
         postimg = request.FILES.get('image', None)
         post = Post.objects.create(author = author, authorprofile = authorprofile, username = user, text=text, postimg = postimg)
+        if post:
+            profile.total_post = profile.total_post + 1
+            profile.save()
         
     return render(request,'base/home.html', {'data':data, 'posts':status, 'total_post':total_post, 'comments': comments})
 
@@ -47,8 +49,15 @@ def rendertosetting(request):
     return render(request,'base/render.html')
 
 
-
+@login_required(login_url='/login/')
 def user_logout(request):
+    user = request.user
+    user_obj = User.objects.get(username=user)
+    latest_login_entry = UserLoginHistory.objects.filter(user=user_obj, logout_time__isnull = True).first()
+    if latest_login_entry:
+        latest_login_entry.logout_time = timezone.now()
+        latest_login_entry.duration_minutes = (latest_login_entry.logout_time - latest_login_entry.login_time).total_seconds() / 60
+        latest_login_entry.save()
     logout(request)
     return redirect('login')
 
@@ -69,7 +78,12 @@ def login(request):
                     checkk = Verify_User.objects.get(username = un)
                     if checkk.check_user == True:
                         auth.login(request, userr)
+                        user = request.user
+                        user_obj = User.objects.get(username = user)
+                        time = UserLoginHistory.objects.create(user = user_obj, login_time = timezone.now())
                         return redirect('index')
+                        
+                        
                     else:
                         messages.warning(request,"Please Verify Your Account First!")
             else:
@@ -81,34 +95,33 @@ def login(request):
 
 
 @login_required(login_url='/login/')
-def like(request):
-    username = request.user.username
-    
-    post_id = request.GET.get('post_id')
-
+def like_post(request, post_id):
     post = Post.objects.get(id=post_id)
+    user = request.user
 
-    like_filter = Like.objects.filter(post_id=post_id, username=username).first()
-    if like_filter == None:
-        new_like = Like.objects.create(post_id=post_id, username=username)
-        new_like.liked_status = True
-        new_like.save()
-        post.total_like = post.total_like+1
+    if Like.objects.filter(user=user, post=post).exists():
+        Like.objects.filter(user=user, post=post).delete()
+        post.likes.remove(user)
+        post.total_like -= 1
         post.save()
-        return redirect('/', {'liked':like_filter})
     else:
-        like_filter.delete()
-        like_filter.like_status = False
-        post.total_like = post.total_like-1
+        like = Like(user=user, post=post)
+        like.save()
+        post.likes.add(user)
+        post.total_like += 1
         post.save()
-        return redirect('/', )
-
+    return redirect('/')
 
 @login_required(login_url='/login/')
 def postdelete(request):
+    user = request.user
+    profile = Profile.objects.get(user = user)
     post_id = request.GET.get('post_id')
     post = Post.objects.get(id=post_id)
     post.delete()
+    profile.total_post = profile.total_post - 1
+    profile.save()
+    
     return redirect('/')
 
 @login_required(login_url='/login/')
@@ -130,9 +143,14 @@ def replay_delete(request):
 
 @login_required(login_url='/login/')
 def profile_post_delete(request):
+    user = request.user
+    profile = Profile.objects.get(user = user)
     post_id = request.GET.get('post_id')
     post = Post.objects.get(id=post_id)
     post.delete()
+    profile.total_post = profile.total_post - 1
+    profile.save()
+    
     return redirect('/')
 
 
@@ -221,7 +239,18 @@ def profile(request, id):
     posts = Post.objects.filter(author = user_data)
     post_length = len(posts)
     
+    user = get_object_or_404(User, id=id)
+    user_profile_check = get_object_or_404(Profile, user=user)
     
+    followers_check = user_profile_check.followers.all()
+    
+    follow_check = False
+    for follower in followers_check:
+        if request.user == follower:
+            follow_check = True
+            break
+        else:
+            follow_check = False
     
     
     context = {
@@ -229,10 +258,8 @@ def profile(request, id):
         "profile_data" : profile_data,
         'posts' : posts,
         'post_length' : post_length,
+        'follow_check': follow_check,
     }
-
-
-    
     return render(request,'base/profile.html',context)
 
 
@@ -254,6 +281,20 @@ def update(request,id):
         fm = ProfileForm(instance=pi)
         
     return render(request,'base/update.html',{'form':fm})
+
+
+@login_required(login_url='/login/')
+def profile_image_update(request,id):
+    if request.method =='POST':
+        pi = Profile.objects.get(pk= id)
+        fm = ProfileImageForm(request.POST, request.FILES, instance=pi)
+        if fm.is_valid():
+            fm.save()
+    else:
+        pi = Profile.objects.get(pk= id)
+        fm = ProfileImageForm(instance=pi)
+        
+    return render(request,'base/profileimageedit.html',{'form':fm})
 
 
 
@@ -356,7 +397,9 @@ def show_replay(request, pid, cid):
     
     return render(request, 'base/replay.html', {'posts':post, 'comments': comments, 'replays':replays})
     
-
+    
+    
+@login_required(login_url='/login/')
 def blocklist(request, bid):
     user = request.user.username
     author = User.objects.get(username = user)
@@ -369,6 +412,8 @@ def blocklist(request, bid):
     return redirect('/')
 
 
+
+@login_required(login_url='/login/')
 def unblock(request, block_user_id):
     user = request.user
     blocked_user = User.objects.get(id = block_user_id)
@@ -377,12 +422,16 @@ def unblock(request, block_user_id):
         unblock_user.delete()
     return redirect('showblocklist')
 
+
+@login_required(login_url='/login/')
 def showblocklist(request):
     author = request.user
     users = Block.objects.filter(author = author)
     return render(request, 'base/blocklist.html', {'users' : users, })
     
     
+    
+@login_required(login_url='/login/')   
 def download_image(request, image_id):
     image = get_object_or_404(Post, pk=image_id)
     image_path = image.postimg.path
@@ -390,9 +439,137 @@ def download_image(request, image_id):
     return response
 
 
-
+@login_required(login_url='/login/')
 def suggesions_search(request):
     search_text = request.GET.get('search_box')
     users_data = User.objects.filter(Q(first_name__contains=search_text) | Q(last_name__contains=search_text))
+    
     return render(request,'base/suggesionsresult.html',{'data':users_data})
     
+    
+@login_required(login_url='/login/')
+def reports(request, username):
+    user = User.objects.get(username = username)
+    overview = Profile.objects.get(user = user)
+    
+    posts = Post.objects.filter(authorprofile = overview)
+    
+    total_comments = 0
+    for post in posts:
+       total_comments +=  post.total_comment
+
+    likes = Like.objects.filter(post__in =posts)
+    total_likes = len(likes)
+    
+    # log_history = UserLoginHistory.objects.filter(user = user, login_time__isnull = False, logout_time__isnull = False)
+    log_history = UserLoginHistory.objects.filter(user = user)
+    
+    
+    context = {
+        'overview': overview,
+        'total_likes': total_likes,
+        'comment': comment,
+        'total_comments': total_comments,
+        'posts': posts,
+        'log_history': log_history,
+        
+    }
+    
+    return render(request, 'base/reports.html', context)
+
+
+@login_required(login_url='/login/')
+def follow_user(request, user_id):
+    user_to_follow = get_object_or_404(User, id=user_id)
+    
+    try:
+        user_profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        pass
+    
+    user_to_unfollow = get_object_or_404(User, id=user_id)
+
+    if user_to_follow != request.user and user_to_follow not in user_profile.following.all():
+        user_profile.following.add(user_to_follow)
+        user_to_follow_profile = Profile.objects.get(user=user_to_follow)
+        user_to_follow_profile.followers.add(request.user)
+        
+    elif user_to_unfollow != request.user and user_to_unfollow in user_profile.following.all():
+        user_profile.following.remove(user_to_unfollow)
+        user_to_unfollow_profile = Profile.objects.get(user=user_to_unfollow)
+        user_to_unfollow_profile.followers.remove(request.user)
+        
+    user = get_object_or_404(User, id=user_id)
+    user_profile_check = get_object_or_404(Profile, user=user)
+    
+    followers_check = user_profile_check.followers.all()
+
+    return redirect('profile', user_id)
+
+
+
+@login_required(login_url='/login/')
+def suggestion_follow_user(request, user_id):
+    user_to_follow = get_object_or_404(User, id=user_id)
+    
+    try:
+        user_profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        pass
+    
+    user_to_unfollow = get_object_or_404(User, id=user_id)
+
+    if user_to_follow != request.user and user_to_follow not in user_profile.following.all():
+        user_profile.following.add(user_to_follow)
+        user_to_follow_profile = Profile.objects.get(user=user_to_follow)
+        user_to_follow_profile.followers.add(request.user)
+        
+    elif user_to_unfollow != request.user and user_to_unfollow in user_profile.following.all():
+        user_profile.following.remove(user_to_unfollow)
+        user_to_unfollow_profile = Profile.objects.get(user=user_to_unfollow)
+        user_to_unfollow_profile.followers.remove(request.user)
+        
+    user = get_object_or_404(User, id=user_id)
+    user_profile_check = get_object_or_404(Profile, user=user)
+    
+    followers_check = user_profile_check.followers.all()
+
+    return redirect('suggestion')
+
+
+
+
+
+@login_required(login_url='/login/')
+def follower_list(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user_profile = get_object_or_404(Profile, user=user)
+    
+    followers = user_profile.followers.all()
+    
+    profile_object = None
+    for follower in followers:
+        profile_object = Profile.objects.filter(user = follower)
+    
+    # print([f"{key}: {value}" for key, value in followers.__dict__.items()])
+    
+    return render(request, 'base/follower_list.html', {'user_profile': user_profile, 'followers': followers, 'profile_object':profile_object})
+
+
+
+@login_required(login_url='/login/')
+def following_list(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user_profile = get_object_or_404(Profile, user=user)
+    
+    followings = user_profile.following.all()
+    
+    profile_object = None
+
+    for following in followings:
+        profile_object = Profile.objects.filter(user = following)
+    
+    return render(request, 'base/following_list.html', {'user_profile': user_profile, 'followings': followings, 'profile_object': profile_object})
+
+
+

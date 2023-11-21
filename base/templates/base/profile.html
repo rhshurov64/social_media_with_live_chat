@@ -64,10 +64,11 @@
                             <div class="wrapper">
                                 <img src="{{ profile_data.profileimg.url }}" alt="" class="image--cover">
                                 {% if request.user.id == profile_data.user.id %}
-                                <div class="file btn btn-sm btn-outline-success">
-                                    <i class="fa-regular fa-user"></i> Change Profie Picture
-                                    <input type="file" name="file" />
+
+                                <div class="file btn btn-sm btn-outline-info mt-1">
+                                    <a style="color: black;" href="{% url 'profile_image_update' profile_data.id %}"><i class="fa-solid fa-pen fa-lg"></i> Edit Profile Image </a>
                                 </div>
+                                
                                 {% endif %}
 
                             </div>
@@ -85,54 +86,72 @@
 
 
                                 <ul class="list-group list-group-horizontal">
-                                    <a href="" class="ms-2" style="text-decoration: none;">
-                                        <li class="list-group-item  btn btn-outline-info"><b>Follower: 1000</b></li>
+                                    <a href="{% url 'follower_list' profile_data.user.id %}" class="ms-2" style="text-decoration: none;">
+                                        <li class="list-group-item  btn btn-outline-info"><b>Follower: {{ profile_data.followers.count }}</b></li>
                                     </a>
 
-                                    <a href="" style="text-decoration: none;">
-                                        <li class="list-group-item ms-2 btn btn-outline-info "><b>Following: 1000</b>
+                                    <a href="{% url 'following_list' profile_data.user.id %}" style="text-decoration: none;">
+                                        <li class="list-group-item ms-2 btn btn-outline-info "><b>Following: {{ profile_data.following.count }}</b>
                                         </li>
                                     </a>
 
+
                                 </ul>
                                 <hr>
-                                <p class="d-inline me-3">Total Post : {{post_length}}</p>
+                                <p class="d-inline me-2">Total Post : {{post_length}}</p>
                                 {% if request.user.id != profile_data.user.id %}
+                                <span>| </span>
+
+                                {% if follow_check %}
+                                <a href="{% url 'follow_user' profile_data.user.id %}" class="btn btn-sm btn-success ms-2 px-2">Following </a>
+                                {% else %}
+                                <a href="{% url 'follow_user' profile_data.user.id %}" class="btn btn-sm btn-primary ms-1 px-2">+ Follow </a>
+                                {% endif %}
                                 
-                                
-                                <span>|</span>
-
-
-                                <a href="#" class="btn btn-sm btn-primary ms-3 px-2" id="follow-button">+ Follow</a>
-
-
                                 {% endif %}
 
+
                                 <hr>
-
-
-
-
-
 
 
                                 <h6 class="text-start mb-4">About Me</h6>
-                                <p class="text-justify">{{ profile_data.about }}
-                                </p>
+                                
+                                {% if profile_data.about %}
+                                <p class="text-justify">{{ profile_data.about }}</p>
+
+                                {% else %}
+                                <p class="text-justify">Not Set Yet</p>
+                                {% endif %}
+                                    
+                               
+                                
 
                                 <hr>
-                                <h6 class="text-start mb-4">Social</h6>
+                                <h6 class="text-start mb-4">Social Profile's</h6>
                                 <div class="hover-effect1 text-center">
+                                    
 
-                                    <a target="_blank" href="{{ profile_data.facebook }}" title="Facebook"><i
-                                            class="fa-brands fa-facebook"></i></a>
-                                    <a target="_blank" href="{{ profile_data.linkdin }}" title="LinkdIn"><i
-                                            class="fa-brands fa-linkedin"></i></a>
-                                    <a target="_blank" href="{{ profile_data.twitter }}" title="Twitter"><i
-                                            class="fa-brands fa-twitter"></i></a>
+                                {% if profile_data.facebook %}
+                                <a target="_blank" href="{{ profile_data.facebook }}" title="Facebook"><i
+                                    class="fa-brands fa-facebook"></i></a>
+                                {% endif %}
+                                {% if profile_data.linkdin %}
+                                <a target="_blank" href="{{ profile_data.linkdin }}" title="Facebook"><i
+                                    class="fa-brands fa-facebook"></i></a>
+                                {% endif %}
+                                {% if profile_data.twitter %}
+                                <a target="_blank" href="{{ profile_data.twitter }}" title="Facebook"><i
+                                    class="fa-brands fa-facebook"></i></a>
+                                {% endif %}
+                                {% if profile_data.github %}
+                                <a target="_blank" href="{{ profile_data.github }}" title="Facebook"><i
+                                    class="fa-brands fa-facebook"></i></a>
+                                {% endif %}
 
-                                    <a target="_blank" href="{{ profile_data.github }}" title="Github"><i
-                                            class="fa-brands fa-github"></i></a>
+                                {% if profile_data.facebook and profile_data.linkdin and profile_data.twitter and profile_data.github is None %}
+                                    <span>Not Set Yet</span>
+                                {% endif %}
+         
 
                                 </div>
 
@@ -232,7 +251,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <a class="btn btn-outline-info px-4"
-                                    href="{% url 'update' profile_data.id %}">Edit Profile</a>
+                                    href="{% url 'update' profile_data.id %}"><i class="fas fa-edit me-2"></i>Edit Profile</a>
                             </div>
                         </div>
                     </div>
@@ -307,22 +326,18 @@
 
                                     <div class="">
 
-                                        <div class="my-4 flex space-x-4 lg:font-bold" style="display: inline;">
-                                            <a href="/like?post_id={{p.id}}" class="flex items-center space-x-2"
-                                                style="display: inline;">
-                                                <div class="rounded-full text-black" style="display: inline;">
-
-                                                    <!-- love icon START-->
-                                                    <i class="fa-regular fa-heart fa-lg mt-4 "
-                                                        style="color: #c82828;"></i>
-                                                    <!-- love icon ENd-->
-
-                                                    {% if p.total_like >= 1 %}
-
-
-                                                    {% endif %}
-                                                </div>
+                                        <div class="my-0 flex space-x-4 lg:font-bold" style="display: inline;">
+                                            <a href="{% url 'like_post' p.id %}" class="like-btn">
+                                            
+                                            <!-- Love Icon -->
+                                            
+                                            {% if request.user in p.likes.all %}
+                                                <i class="fa-solid fa-lg fa-heart"></i>
+                                            {% else %}
+                                                <i class="fa-regular fa-lg fa-heart"></i>
+                                            {% endif %}                                          
                                             </a>
+
                                             <h6 class="ms-3" style="display: inline;">{{p.total_like}}</h6>
                                             
                                             <a href="{% url 'show_comment' p.id %}"><i class="fa-regular fa-comment fa-lg  ms-5"></i></a>
@@ -360,41 +375,7 @@
 
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<!-- <script>
-    $(document).ready(function(){
-        $("#follow-button").click(function(){
-            $(this).text($(this).text() == '+ Follow' ? 'Following' : '+ Follow');
-            $(this).toggleClass('btn-success')
-        });
-    });
-</script> -->
-<script>
-    $(document).ready(function() {
-        // Check if the button state is stored in local storage
-        var isFollowing = localStorage.getItem('isFollowing') === 'true';
 
-        // Set the initial button text and style based on the stored state
-        if (isFollowing) {
-            $("#follow-button").text('Following').addClass('btn-success');
-        }
-
-        $("#follow-button").click(function() {
-            // Toggle the button state
-            isFollowing = !isFollowing;
-
-            // Update the button text and style
-            if (isFollowing) {
-                $("#follow-button").text('Following').addClass('btn-success');
-            } else {
-                $("#follow-button").text('+ Follow').removeClass('btn-success');
-            }
-
-            // Store the button state in local storage
-            localStorage.setItem('isFollowing', isFollowing);
-        });
-    });
-</script>
 
 
 

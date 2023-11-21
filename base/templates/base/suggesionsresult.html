@@ -73,11 +73,18 @@
         
                 <div class="col-10 mb-3">
                     <a href="{% url 'profile' d.id %}">
+                        
                         <h6>{{ d.get_full_name }}</h6>
-                        <a href="#" class="btn btn-sm btn-primary ms-1 px-2" id="{{d}}follow-button">+ Follow</a>
+                        {% if request.user in d.profile.followers.all %}
+                        <a href="{% url 'suggestion_follow_user' d.id %}" class="btn btn-sm btn-success ms-2 px-2">Following </a>
+                        {% else %}
+                            <a href="{% url 'suggestion_follow_user' d.id %}" class="btn btn-sm btn-primary ms-1 px-2">+ Follow </a>
+                        {% endif %}
+                    </a>
                     </a>
                 </div>
-        
+
+               
                 
         
             </div>
@@ -90,35 +97,8 @@
     </div>
 
 </div>
-{% for d in data %}
 
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Check if the button state is stored in local storage
-        var isFollowing = localStorage.getItem('isFollowing') === 'true';
 
-        // Set the initial button text and style based on the stored state
-        if (isFollowing) {
-            $("#{{d}}follow-button").text('Following').addClass('btn-success');
-        }
 
-        $("#{{d}}follow-button").click(function() {
-            // Toggle the button state
-            isFollowing = !isFollowing;
-
-            // Update the button text and style
-            if (isFollowing) {
-                $("#{{d}}follow-button").text('Following').addClass('btn-success');
-            } else {
-                $("#{{d}}follow-button").text('+ Follow').removeClass('btn-success');
-            }
-
-            // Store the button state in local storage
-            localStorage.setItem('isFollowing', isFollowing);
-        });
-    });
-</script>
-{% endfor %}
 {% endblock content %}
