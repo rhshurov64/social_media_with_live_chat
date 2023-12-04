@@ -316,18 +316,18 @@
 
                                 </div>
                                 <div class="post-description">
-                                    <p>{{p.text}}</p>
+                                    <p style="margin-top: -30px;">{{p.text}}</p>
 
                                     {% if p.postimg %}
-                                    <img style="height: 400px; width:auto;" src="{{ p.postimg.url }}" alt="">
+                                    <img class="mb-3" style="height: 400px; width:auto;" src="{{ p.postimg.url }}" alt="">
 
 
                                     {% endif %}
 
-                                    <div class="">
+                                    <div class="" style="margin-top: ;">
 
                                         <div class="my-0 flex space-x-4 lg:font-bold" style="display: inline;">
-                                            <a href="{% url 'like_post' p.id %}" class="like-btn">
+                                            <a style="color: red;" href="{% url 'like_post' p.id %}" class="like-btn">
                                             
                                             <!-- Love Icon -->
                                             

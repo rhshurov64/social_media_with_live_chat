@@ -47,6 +47,11 @@ class BlockAdmin(admin.ModelAdmin):
 @admin.register(UserLoginHistory)
 class UserLoginHistoryAdmin(admin.ModelAdmin):
     list_display = ['user','login_time','logout_time', 'duration_minutes']
+    
+    
+@admin.register(OnlineStatus)
+class OnlineStatusAdmin(admin.ModelAdmin):
+    list_display = ['user','status']
 
 
 

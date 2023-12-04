@@ -40,8 +40,25 @@ def index(request):
         if post:
             profile.total_post = profile.total_post + 1
             profile.save()
+    
+    user = request.user
+    user_object = User.objects.get(username = user)
+    user_profile = get_object_or_404(Profile, user=user)
+    
+    followers = user_profile.followers.all()
+    follower_profile_object = None
+    
+    for follower in followers:
+        follower_profile_object = Profile.objects.filter(user = follower)
+        print(follower_profile_object)
+    
+    followings = user_profile.following.all()
+    following_profile_object = None
+    for following in followings:
+        following_profile_object = Profile.objects.filter(user = following)
+        print(following_profile_object)
         
-    return render(request,'base/home.html', {'data':data, 'posts':status, 'total_post':total_post, 'comments': comments})
+    return render(request,'base/home.html', {'data':data, 'posts':status, 'total_post':total_post, 'comments': comments, 'user_profile': user_profile,'followers':followers, 'followings': followings, 'follower_profile_object': follower_profile_object, 'following_profile_object':following_profile_object, 'user_object':user_object})
 
 
 
@@ -53,11 +70,15 @@ def rendertosetting(request):
 def user_logout(request):
     user = request.user
     user_obj = User.objects.get(username=user)
-    latest_login_entry = UserLoginHistory.objects.filter(user=user_obj, logout_time__isnull = True).first()
-    if latest_login_entry:
-        latest_login_entry.logout_time = timezone.now()
-        latest_login_entry.duration_minutes = (latest_login_entry.logout_time - latest_login_entry.login_time).total_seconds() / 60
-        latest_login_entry.save()
+    status = OnlineStatus.objects.filter(user = user_obj).update(status ='offline')
+    
+    login_entry = UserLoginHistory.objects.filter(user=user_obj, logout_time__isnull = True).first()
+    if login_entry:
+        latest_login_entry = UserLoginHistory.objects.filter(user=user_obj, logout_time__isnull = True).order_by('-login_time').first()
+        if latest_login_entry:
+            latest_login_entry.logout_time = timezone.now()
+            latest_login_entry.duration_minutes = (latest_login_entry.logout_time - latest_login_entry.login_time).total_seconds() / 60
+            latest_login_entry.save()
     logout(request)
     return redirect('login')
 
@@ -81,6 +102,11 @@ def login(request):
                         user = request.user
                         user_obj = User.objects.get(username = user)
                         time = UserLoginHistory.objects.create(user = user_obj, login_time = timezone.now())
+                        user_status = OnlineStatus.objects.get(user = user_obj)
+                        if user_status:
+                            user_status.status = 'online'
+                            user_status.save()
+                        # status.save()
                         return redirect('index')
                         
                         
@@ -110,7 +136,7 @@ def like_post(request, post_id):
         post.likes.add(user)
         post.total_like += 1
         post.save()
-    return redirect('/')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required(login_url='/login/')
 def postdelete(request):
@@ -122,7 +148,7 @@ def postdelete(request):
     profile.total_post = profile.total_post - 1
     profile.save()
     
-    return redirect('/')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required(login_url='/login/')
 def comment_delete(request):
@@ -130,7 +156,7 @@ def comment_delete(request):
     post_id = request.GET.get('post_id')
     cmnt = Comment.objects.get(id = cmnt_id)
     cmnt.delete()
-    return redirect(f'show_comment/{post_id}/')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 @login_required(login_url='/login/')
@@ -138,7 +164,7 @@ def replay_delete(request):
     replay_id = request.GET.get('replay_id')
     replay = Replay.objects.get(id = replay_id)
     replay.delete()
-    return redirect('/')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 @login_required(login_url='/login/')
@@ -151,8 +177,7 @@ def profile_post_delete(request):
     profile.total_post = profile.total_post - 1
     profile.save()
     
-    return redirect('/')
-
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def signup(request):
@@ -504,7 +529,7 @@ def follow_user(request, user_id):
     
     followers_check = user_profile_check.followers.all()
 
-    return redirect('profile', user_id)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 
@@ -534,7 +559,7 @@ def suggestion_follow_user(request, user_id):
     
     followers_check = user_profile_check.followers.all()
 
-    return redirect('suggestion')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 

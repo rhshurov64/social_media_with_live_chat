@@ -110,4 +110,9 @@ class UserLoginHistory(models.Model):
     logout_time = models.DateTimeField(null=True, blank=True)
     duration_minutes = models.IntegerField(default=0, null=True, blank=True)
     
+class OnlineStatus(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    status = models.CharField(default='offline', max_length=100)
     
+    def __str__(self):
+        return self.status

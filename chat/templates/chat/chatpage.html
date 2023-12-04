@@ -1,0 +1,258 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+
+
+
+ <!-- char-area -->
+ <section class="message-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="chat-area">
+                    <!-- chatlist -->
+
+
+                    <div class="chatlist">
+                        <div class="modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="chat-header">
+                                    <div class="msg-search">
+                                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search" aria-label="search">
+                                        <a class="add" href="#"><img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/add.svg" alt="add"></a>
+                                    </div>
+
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="Open-tab" data-bs-toggle="tab" data-bs-target="#Open" type="button" role="tab" aria-controls="Open" aria-selected="true">Active</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="Closed-tab" data-bs-toggle="tab" data-bs-target="#Closed" type="button" role="tab" aria-controls="Closed" aria-selected="false">All</button>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <!-- chat-list start-->
+                                    <div class="chat-lists">
+                                        <div class="tab-content" id="myTabContent">
+
+                                            <div class="tab-pane fade show active" id="Open" role="tabpanel" aria-labelledby="Open-tab">
+                                                <!-- Active chat-list start-->
+
+                                                <div class="chat-list">
+                                                    {% for userprofile in userprofile %}
+                                                    <a href="{% url 'chat:chat_profile' userprofile.user.username %}" class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0">
+                                                            <img class="img-fluid" style="height: 40px; width: 40px; border-radius: 50%; " src="{{userprofile.profileimg.url}}" alt="user img">
+                                                            <span class="active"></span>
+                                                        </div>
+                                                        <div class="flex-grow-1 ms-3">
+                                                            <h3>{{userprofile.user.get_full_name}}</h3>
+                                                            <p>@{{userprofile.user.username}}</p>
+                                                        </div>
+                                                    </a>
+                                                    {% endfor %}
+                                                </div>
+                                                <!-- Active chat-list end -->
+
+                                            </div>
+                                            <div class="tab-pane fade" id="Closed" role="tabpanel" aria-labelledby="Closed-tab">
+
+                                                <!-- All chat-list start-->
+                                                <div class="chat-list">
+                                                    {% for userprofile in userprofile %}
+                                                    <a href="{% url 'chat:chat_profile' userprofile.user.username %}" class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0">
+                                                            <img class="img-fluid" style="height: 40px; width: 40px; border-radius: 50%; " src="{{userprofile.profileimg.url}}" alt="user img">
+                                                            <span class="active"></span>
+                                                        </div>
+                                                        <div class="flex-grow-1 ms-3">
+                                                            <h3>{{userprofile.user.get_full_name}}</h3>
+                                                            <p>@{{userprofile.user.username}}</p>
+                                                        </div>
+                                                    </a>
+                                                    {% endfor %}
+                                                </div>
+                                                <!-- All chat-list End -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- chat-list End-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- chatlist -->
+
+
+
+                    <!-- chatbox -->
+                    
+                    <div class="chatbox">
+                        <div class="modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="msg-head">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <div class="d-flex align-items-center">
+                                                <span class="chat-icon"><img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/arroleftt.svg" alt="image title"></span>
+                                                <div class="flex-shrink-0">
+                                                    <img class="img-fluid" style="height: 50px; width:50px; border-radius:50%;" src="{{chatbox_profile.profileimg.url}}" alt="user img">
+                                                </div>
+                                                <a href="{% url 'profile' chatbox_profile.user.id %}">
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <h3>{{ chatbox_profile.user.get_full_name }}</h3><p>{{ status_user }}</p>
+                                                    </div>
+                                                </a>
+                                                
+                                            </div>
+                                            
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                </div>
+
+
+                                <div class="modal-body">
+                                    <div class="msg-body" id="chatDiv">
+                                        <ul>
+                                            
+                                            {% for msg in messages %}
+                                               {% if msg.sender == request.user %}
+                                                <li class="repaly">
+                                                    <p>{{msg.message}} </p>
+                                                    <span class="time">{{msg.time}}</span>
+                                                </li>
+                                               {% else %}
+                                                <li class="sender">
+                                                    <p>{{msg.message}} </p>
+                                                    <span class="time">{{msg.time}}</span>
+                                                </li>
+                                                
+                                               {% endif %}
+                                                
+                                            
+                                                
+                                               
+
+                                               
+                                            
+                                            {% endfor %}
+                                                
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+
+
+                                <div class="send-box">
+                                    <form action="">
+                                        <input id="textInput" type="text" class="form-control" aria-label="message…" placeholder="Write message…">
+
+                                        <button id="submit" type="button"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</button>
+                                    </form>
+
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <!-- chatbox -->
+
+
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+<!-- char-area -->
+    
+
+{{username|json_script:'user_name'}}
+
+<script>
+    
+    const username = JSON.parse(document.getElementById('user_name').textContent)
+    console.log(username)
+
+    var socket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/chat/'
+        + username
+        + '/')      
+
+    socket.onopen = function(event){
+        console.log('Connected')
+        
+
+    }
+
+    socket.onmessage = function(event){
+
+        
+
+        const data = JSON.parse(event.data)
+        console.log(data.msg)
+        
+
+        var sender = data.sender;
+        var chatDiv = document.getElementById('chatDiv');
+        var message = data.msg;
+        var chatDiv = document.getElementById('chatDiv');
+
+        var message = data.msg;
+        var timestamp = data.time;
+
+
+        var newListItem = document.createElement('li');
+
+
+        newListItem.className = (sender == username) ? 'sender' : 'repaly';
+        
+        var messageContent = '<p>' + message + '</p>' + '<span class="time">' + timestamp + '</span>';
+        
+        newListItem.innerHTML = messageContent;
+        
+        chatDiv.querySelector('ul').appendChild(newListItem);
+        
+        chatDiv.scrollTop = chatDiv.scrollHeight;              
+    }
+
+
+    socket.onerror = function(event){
+        console.log('error', event)
+    }
+
+
+    socket.onclose = function(){
+        console.log('onclose')
+    }
+
+    document.getElementById("submit").onclick = function (event) {
+        const messageInputDom = document.getElementById("textInput")
+        const message = messageInputDom.value
+        socket.send(JSON.stringify({
+            'msg': message
+        }))
+        messageInputDom.value = ''
+        }
+
+
+</script>
+{% endblock content %}
+    
+    
+    

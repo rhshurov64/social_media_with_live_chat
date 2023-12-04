@@ -10,94 +10,145 @@
         <!-- left side start -->
 
         <div class="col-4">
-            <div id="first_box" class="box">
-
-
-
-                <!-- profile design start-->
-
-                <div class="first_halve">
-                    <div class="user_img">
-                        
-                        <img src="{{ request.user.profile.profileimg.url }}" class="profile_img mt-3"
-                            alt="user profile images">
-                    </div>
-                    <div class="user_about">
-                        <h5 class="my-3">{{ request.user.get_full_name }}</h5>
-                        <span class="user_job">{{ request.user.profile.bio }}</p>
-                            <p class="text-muted font-size-sm">{{ request.user.profile.location }}, {{request.user.profile.country}}</p>
-                            <div class="user_data mt-3">
-                                <span class="about_profile">
-                                    
-                                    {% if total_post == 0 %}
-                                    <p>Total Post: 0 </p>
-
-                                    {% elif total_post >= 0 %}
-                                    <p>Total Post: {{total_post}} </p>
-                                    {% endif %}
-                                        
-                                </span>
-                                
+            <div id="" class="box mt-4">
+                <!-- Side design start-->
+                <div class="follow_following">
+                    <div class="modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="chat-header">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="Open-tab" data-bs-toggle="tab" data-bs-target="#Open" type="button" role="tab" aria-controls="Open" aria-selected="true">My Followers</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="Closed-tab" data-bs-toggle="tab" data-bs-target="#Closed" type="button" role="tab" aria-controls="Closed" aria-selected="false">My Followings</button>
+                                    </li>
+                                </ul>
                             </div>
 
-                    </div>
-                    <hr>
-                    <div class="second_halve mt-3">
-                        <ul class="navigation">
+                            <div class="modal-body">
 
-                            <li class="nav_link"> <a href="{% url 'chat:chat_index' %}" class="nav_l"><i class="bi bi-chat-square-dots-fill"></i>
-                                    Chat</a> </li>
-                            <li class="nav_link"><a href class="nav_l"><i class="fa-solid fa-bell" style="color: #0a5ef0;"></i>
-                                    Notification</a></li>
-                            <li class="nav_link"><a href="{% url 'video_conference:home' %}" class="nav_l"><i class="fa-solid fa-video" style="color: #0a68ff;"></i> Video Conference</a></li>
+                                <!-- chat-list start-->
+                                <div class="chat-lists">
+                                    <div class="tab-content" id="myTabContent">
 
-                        </ul>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-center">
-                        <a href="{% url 'profile' request.user.id %}" class="btn btn-outline-success mb-4"><i class="bi bi-eye-fill"></i> View
-                            Profile</a>
+                                        <div class="tab-pane fade show active" id="Open" role="tabpanel" aria-labelledby="Open-tab">
+                                            <!-- Active chat-list start-->
+                                            
+                                            <div class="chat-list">
+                                                {% for follower in followers|slice:"0:3" %}
+                                                    {% for profile in follower_profile_object %}
+                                                    <div class="row" style="border: 2px solid #F6F6F6; padding:10px;">
+                                                        <div class="col-2 text-center me-3">
+                                                            <img style="height: 66px; width:66px; border-radius:50%;border-color:#ECECEC; "
+                                                                src="{{ follower.profile.profileimg.url }}" class="profile_img mt-1" alt="user profile images">
+    
+                                                        </div>
 
+                                                        <div style="margin-left: -10px;" class="col-8">
+                                                            <a href="{% url 'profile' follower.id %}">
+                                                                <h6 class="ms-1" style="color: black;">{{ follower.get_full_name }}</h6>
+                                                                <!-- <p style="margin-top:-7px; color:blue;">@{{ follower.username }}</p> -->
+                                                                {% if request.user  in follower.profile.followers.all %}
+                                                                <a style="padding: 2px 5px;" href="{% url 'suggestion_follow_user' follower.id %}" class="btn btn-sm btn-success ms-2">Following</a>
+                                                                {% else %}
+                                                                <a style="padding: 3px 10px;" href="{% url 'suggestion_follow_user' follower.id %}" class="btn btn-sm btn-primary ms-1">+ Follow</a>
+                                                                {% endif %}
+                                                            </a>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="row text-center d-flex justify-content-center">
+                                                <a href="{% url 'follower_list' request.user.id %}" class="btn btn-sm btn-outline-success px-3 mt-3 text-center w-25">See All...</a>
+                                            </div>
+                                            <!-- Follwer-list end -->
+                                            
+
+                                        </div>
+                                        <div class="tab-pane fade" id="Closed" role="tabpanel" aria-labelledby="Closed-tab">
+
+                                            <!-- All chat-list start-->
+                                            <div class="chat-list">
+                                                {% for followe in followings|slice:"0:3" %}
+                                                    {% for profile in following_profile_object %}
+                                                    <div class="row" style="border: 2px solid #F6F6F6; padding:10px;">
+                                                        <div class="col-2 text-center me-3">
+                                                            <img style="height: 66px; width:66px; border-radius:50%;border-color:#ECECEC; "
+                                                                src="{{ followe.profile.profileimg.url }}" class="profile_img mt-1" alt="user profile images">
+    
+                                                        </div>
+
+                                                        <div style="margin-left: -10px;" class="col-8">
+                                                            <a href="{% url 'profile' followe.id %}">
+                                                                <h6 class="ms-1" style="color: black;">{{ followe.get_full_name }}</h6>
+                                                                <!-- <p style="margin-top:-7px; color:blue;">@{{ followe.username }}</p> -->
+
+                                                                {% if request.user  in followe.profile.following.all %}
+                                                                <a style="padding: 2px 5px;" href="{% url 'suggestion_follow_user' followe.id %}" class="btn btn-sm btn-success ms-2">Following</a>
+                                                                {% else %}
+                                                                <a style="padding: 3px 10px;" href="{% url 'suggestion_follow_user' followe.id %}" class="btn btn-sm btn-primary ms-1 px-3">+ Follow</a>
+                                                                {% endif %}
+                                                            </a>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </div>
+                                            <!-- Following-list End -->
+                                            <div class="row text-center d-flex justify-content-center">
+                                                <a href="{% url 'following_list' request.user.id %}" class="btn btn-sm btn-outline-success px-3 mt-3 text-center w-25">See All...</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- chat-list End-->
+                            </div>
+                        </div>
                     </div>
 
                 </div>
-
+                    
             </div>
 
             <!-- sugeestions start-->
 
-            <div class="suggesions text-center">
-                <h3 class="mb-3">People You May Know</h3>
+            <div class="suggesions">
+                <h4 class="mb-4 text-center">People You May Know</h4>
                 <div id="third_box" class="box">
 
 
-                    {% for d in data %}
+                    
                     <!-- suggetion profile -->
-                    <div class="container my-3"
-                        style="background-color: #ECECEC; border-radius: 10px; box-shadow: 0 0.2rem rem rgba(0, 0, 0, 0.7); ">
-                        <div class="row">
+                    <div class="container">
+                        {% for d in data|slice:"0:3" %}
+                            {% if d not in request.user.profile.following.all %}
+                            <div class="row mb-2" style="border: 2px solid #F6F6F6; padding:10px; ">
+                                <div class="col-2">
+                                    <img style="height: 60px; width:60px; border-radius:50%; border-color:#ECECEC; "
+                                        src="{{ d.profile.profileimg.url }}" class="profile_img mt-1"
+                                        alt="user profile images">
 
-                            <div class="col-2">
-                                <img style="height: 60px; width:60px; border-radius:50%;border-color:#ECECEC; "
-                                    src="{{ d.profile.profileimg.url }}" class="profile_img mt-1"
-                                    alt="user profile images">
+                                </div>
 
+                                <div class="col-9 ms-2 mt-2">
+                                    <a href="{% url 'profile' d.id %}">
+                                        <h6 style="color: black;">{{ d.get_full_name }}</h6>
+                                        <p style="margin-top: -7px;" >@{{ d.username }}</p>
+                                    </a>
+                                </div>
                             </div>
-
-                            <div class="col-9 mt-2">
-                                <a href="{% url 'profile' d.id %}">
-                                    <h5>{{ d.get_full_name }}</h5>
-                                </a>
-                            </div>
-
-                            
-                        </div>
-
+                            {% endif %}
+                        {% endfor %}
                     </div>
 
-                    {% endfor %}
+                    
                     <div class="d-flex justify-content-center">
-                        <a href="/suggestion/" class="btn btn-sm btn-success"> See
+                        <a href="/suggestion/" class="btn btn-sm btn-outline-success mt-3"> See
                             More ...</a>
 
                     </div>
@@ -218,7 +269,7 @@
                                 <div class="">
 
                                     <div class="my-0 flex space-x-4 lg:font-bold" style="display: inline;">
-                                        <a href="{% url 'like_post' p.id %}" class="like-btn">
+                                        <a style="color: red;" href="{% url 'like_post' p.id %}" class="like-btn">
                                         
                                         <!-- Love Icon -->
                                         

@@ -3,19 +3,8 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="row">
-        <div class="col-4">
 
-        </div>
-        <div class="col-8">
 
-        </div>
-    </div>
-
-</div>
-
-<!-- 
  <!-- char-area -->
  <section class="message-area">
     <div class="container">
@@ -53,14 +42,14 @@
 
                                                 <div class="chat-list">
                                                     {% for userprofile in userprofile %}
-                                                    <a href="#" class="d-flex align-items-center">
+                                                    <a href="{% url 'chat:chat_profile' userprofile.user.username %}" class="d-flex align-items-center">
                                                         <div class="flex-shrink-0">
                                                             <img class="img-fluid" style="height: 40px; width: 40px; border-radius: 50%; " src="{{userprofile.profileimg.url}}" alt="user img">
                                                             <span class="active"></span>
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h3>{{userprofile.user.get_full_name}}</h3>
-                                                            <p>{{userprofile.bio}}</p>
+                                                            <p>@{{userprofile.user.username}}</p>
                                                         </div>
                                                     </a>
                                                     {% endfor %}
@@ -73,14 +62,14 @@
                                                 <!-- All chat-list start-->
                                                 <div class="chat-list">
                                                     {% for userprofile in userprofile %}
-                                                    <a href="#" class="d-flex align-items-center">
+                                                    <a href="{% url 'chat:chat_profile' userprofile.user.username %}" class="d-flex align-items-center">
                                                         <div class="flex-shrink-0">
                                                             <img class="img-fluid" style="height: 40px; width: 40px; border-radius: 50%; " src="{{userprofile.profileimg.url}}" alt="user img">
                                                             <span class="active"></span>
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h3>{{userprofile.user.get_full_name}}</h3>
-                                                            <p>{{userprofile.bio}}</p>
+                                                            <p>@{{userprofile.user.username}}</p>
                                                         </div>
                                                     </a>
                                                     {% endfor %}
@@ -100,9 +89,10 @@
 
 
                     <!-- chatbox -->
+                    
                     <div class="chatbox">
                         <div class="modal-dialog-scrollable">
-                            <div class="modal-content">
+                            <!-- <div class="modal-content">
                                 <div class="msg-head">
                                     <div class="row">
                                         <div class="col-8">
@@ -177,7 +167,7 @@
                                     </form>
 
                                 </div>
-                            </div>
+                            </div> 
                         </div>
                     </div>
                 </div>
