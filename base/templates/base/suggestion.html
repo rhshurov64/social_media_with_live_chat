@@ -35,7 +35,7 @@
             <div class="" role="main">
               <div class="row">
 
-                  <form action="{% url 'suggesions_search' %}" method="GET" class="form-main  form-inline nofloat-xs">
+                  <form action="" method="GET" class="form-main  form-inline nofloat-xs">
                     <div class="form-group form-input-fields form-group-lg has-feedback">
                         <div class="input-group mb-3">
                             <input type="text" style="width: 1145px;" name="search_box" class="search_box" placeholder=" Search For People" aria-label="Recipient's username" aria-describedby="button-addon2">
@@ -59,6 +59,10 @@
 
         {% for d in data %}
             {% if d not in request.user.profile.following.all %}
+            {% if d not in request.user.profile.followers.all %}
+
+            {% if d not in request.user.profile.blocklist.all %}
+            {% if request.user not in d.profile.blocklist.all %}
             <div class="col-5">
                 <div class="row">
                     <div class="col-2">
@@ -81,6 +85,10 @@
                 </div>
             </div>
             <hr>
+            {% endif %}
+            {% endif %}
+
+            {% endif %} 
             {% endif %} 
         {% endfor %}
         

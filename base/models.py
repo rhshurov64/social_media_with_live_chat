@@ -23,6 +23,7 @@ class Profile(models.Model):
     total_following = models.IntegerField(default=0)
     followers = models.ManyToManyField(User, related_name='followers', blank=True)
     following = models.ManyToManyField(User, related_name='following', blank=True)
+    blocklist = models.ManyToManyField(User, related_name='blocklist', blank=True)
     
     def __str__(self):
         return self.user.username
@@ -87,9 +88,6 @@ class Replay(models.Model):
     def __str__(self):
         return str(self.id)
     
-    
-
-
         
         
 class Block(models.Model):
@@ -100,7 +98,7 @@ class Block(models.Model):
     is_block = models.BooleanField(default=False)
     
     def __str__(self):
-       return str(f"{self.author} blocked {self.blocked_user}")
+       return str(self.blocked_user)
    
    
 

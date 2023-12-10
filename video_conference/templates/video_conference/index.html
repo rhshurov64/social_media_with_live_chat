@@ -12,12 +12,23 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Video Conference</title>
   <body>
-    <div class="dashboard">
-        <h1>Welcome, {{request.user.get_full_name}}!</h1>
-        <!-- create a "New Meeting" button -->
-        <a href="{% url 'video_conference:video_call' %}" class="button">New Meeting</a>
-        <a href="{% url 'video_conference:join' %}" class="button">Join Meeting</a>
+    <div class="container text-center mt-4">
+      <div class="row">
+        <div class="col"><h1>Welcome, {{request.user.get_full_name}}!</h1></div>
+      </div>
+      <div class="row">
+        <div class="col mt-3 mb-4"><p>Hello {{request.user.first_name}}, Start video Conference with us. You can Create a new meeting and share the link to others to join your meeting. You can also join others mettings from here.</p></div>
+      </div>
+      <div class="row">
+        <div class="dashboard">
+          <a  class="btn btn-primary button me-5" href="{% url 'video_conference:video_call'  %}" >HOST Meeting</a>
+          <a  class="btn btn-primary button" href="{% url 'video_conference:join' %}" >Join Meeting</a>
+      </div>
+      </div>
+
+
     </div>
+    
   </body>
 </head>
 </html>

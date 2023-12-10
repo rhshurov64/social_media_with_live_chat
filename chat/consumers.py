@@ -70,6 +70,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'time' : time
             
         }))
+        recipient_username = self.scope['url_route']['kwargs']['username']
+        recipient = await self.get_user(recipient_username)
+        sender = await self.get_user(sender_username)
+        await self.create_notification(recipient, sender, f'New message from {sender_username}', time)
+        
         
         
     async def disconnect(self, close_code):
@@ -86,3 +91,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def save_messaage(self, sender, receiver, message, time, group):
         msg = Message.objects.create(sender =sender, recipient =receiver, message =message, time = time, group= group)
+        
+        
+    @database_sync_to_async
+    def create_notification(self, receiver, sender, message, time):
+        Notification.objects.create(receiver=receiver, sender =sender, message=message, timestamp=time)

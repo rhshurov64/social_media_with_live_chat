@@ -27,32 +27,8 @@
 
 <div class="container my-3">
     <div class="row">
-        <!-- Search Panel -->
-        
-          
-          
-          <div class="section-main">
-            <div class="" role="main">
-              <div class="row">
-                  <form action="" method="GET" class="form-main  form-inline nofloat-xs">
-                    <div class="form-group form-input-fields form-group-lg has-feedback">
-                        <div class="input-group mb-3">
-                            <input type="text" style="width: 1145px;" class="search_box" placeholder=" Search For People" aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <button class="btn btn-success px-4" type="button" id="button-addon2"><i class="fa-solid fa-user"></i>  Search</button>
-                            </div>
-                        </div>
-                    </div>
-                  </form>
-              </div>
-          
-          
-              <!--rest of page content -->
-          
-            </div>
-          </div>
-
-
-        <!-- Search Panel End -->
+        <h4 style="margin-top: 15px;" class="text-center">Blocked User's</h4>
+        <hr>
 
         {% for d in users %}
         <div class="col-5">
@@ -81,7 +57,7 @@
 
 
         </div>
-        <hr>
+        <hr style="margin-top: 10px;">
        
         {% endfor %}
     </div>

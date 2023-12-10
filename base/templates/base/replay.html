@@ -131,7 +131,7 @@
                                             <a class="me-3" href="{% url 'commentedit' cmnt.id %}" title="Edit">
                                                 <i class="fa-regular fa-pen-to-square fa-xs"></i>
                                             </a>
-                                            <a href="/comment_delete?cmnt_id={{cmnt.id}}" title="Delete">
+                                            <a href="/comment_delete?cmnt_id={{cmnt.id}}" title="Delete" onclick="return confirm('Are you sure?');">
                                                 <i class="fa-solid fa-trash fa-xs"></i>
                                             </a>
 
@@ -166,7 +166,7 @@
                                                             <a class="me-3" href="{% url 'replayedit' r.id %}" title="Edit">
                                                                 <i class="fa-regular fa-pen-to-square fa-xs"></i>
                                                             </a>
-                                                            <a href="/replay_delete?replay_id={{r.id}}" title="Delete">
+                                                            <a href="/replay_delete?replay_id={{r.id}}" title="Delete" onclick="return confirm('Are you sure?');">
                                                                 <i class="fa-solid fa-trash fa-xs"></i>
                                                             </a>
                 

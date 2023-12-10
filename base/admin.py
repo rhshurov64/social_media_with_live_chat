@@ -4,7 +4,7 @@ from .models import *
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['id','user','bio','profileimg','location','created_at','updated_at','total_post', 'get_followers_count', 'get_following_count']
+    list_display = ['id','user','bio','profileimg','location','created_at','updated_at','total_post', 'get_followers_count', 'get_following_count', 'get_blocklist']
     
     def get_followers_count(self, obj):
         return obj.followers.count()
@@ -16,6 +16,9 @@ class ProfileAdmin(admin.ModelAdmin):
 
     get_following_count.short_description = 'Following Count'
     
+    @admin.display(description='blocklist')
+    def get_blocklist(self, obj):
+        return [block.username for block in obj.blocklist.all()]
     
     
     

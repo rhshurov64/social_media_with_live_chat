@@ -1,0 +1,49 @@
+{% extends 'base/base.html' %}
+
+
+
+{% block content %}
+
+
+<h4 style="margin-top: 15px;" class="text-center">All Notification's</h4>
+<hr>
+
+<div class="container">
+    {% for user_notification in user_notifications %}
+    
+    {% if user_notification.receiver != user_notification.sender %}
+    <div style="width: 70%; margin:auto;" class="mid-div ">
+        <div style="border: 1px solid #C7C8C9; padding : 10px;" class="row mb-3">
+            <div class="col">
+                <div class="notification"><p>{{ user_notification.message }}</a></p>
+                    <span style="margin-top: -10px;" class="time">{{ user_notification.timestamp }}</span>
+                </div>
+            </div>
+            <div class="col gap-2 d-flex align-items-center justify-content-end">
+                
+                {% if user_notification.like_notifcation == True %}
+                <a href="{% url 'show_comment' user_notification.post_id %}" class="btn btn-sm btn-primary">View POST</a>
+
+                {% elif user_notification.comment_notifcation == True %}
+                <a href="{% url 'show_comment' user_notification.post_id %}" class="btn btn-sm btn-primary">View Comment</a>
+
+                {% elif user_notification.replay_notifcation == True %}
+                <a href="{% url 'show_replay' user_notification.post_id user_notification.comment_id %}" class="btn btn-sm btn-primary">View Replay</a>
+
+                {% else %}
+                <a href="{% url 'chat:chat_profile' user_notification.sender.username %}" class="btn btn-sm btn-primary">View Message</a>
+                    
+                {% endif %}
+                    
+                
+                <a href="{% url 'chat:notification_delete' user_notification.id %}" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+
+
+{% endblock content %}

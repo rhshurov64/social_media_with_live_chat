@@ -15,12 +15,13 @@
   <!---Custom CSS File--->
 </head>
 <body>
-  <div class="container">
+  <div class="container text-center">
     <div class="login form">
-      <header>Join Room</header>
+      <header class="mt-5 mb-2"><b>Join Room</b></header>
+      <hr class="mb-5">
       <form action="{% url 'video_conference:join' %}" method="POST">
         {% csrf_token %}
-        <input type="text" placeholder="Enter room ID" name="roomID">
+        <input class="mb-4" type="text" placeholder="Enter room ID" name="roomID"><br>
         <input type="submit" class="button" value="Join">
         <center>
           {% if success %}

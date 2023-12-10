@@ -15,3 +15,18 @@ class Message(models.Model):
     
 
     
+class Notification(models.Model):
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    like_notifcation = models.BooleanField(default=False)
+    post_id = models.IntegerField(default=None, null=True)
+    comment_id = models.IntegerField(default=None, null=True)
+    comment_notifcation = models.BooleanField(default=False)
+    replay_notifcation = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return str(self.receiver)
+    

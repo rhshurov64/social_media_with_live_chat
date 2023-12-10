@@ -15,6 +15,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import FileResponse
 from django.utils import timezone
+from chat.models import Notification
 
 
 
@@ -106,7 +107,6 @@ def login(request):
                         if user_status:
                             user_status.status = 'online'
                             user_status.save()
-                        # status.save()
                         return redirect('index')
                         
                         
@@ -121,10 +121,12 @@ def login(request):
 
 
 @login_required(login_url='/login/')
+
 def like_post(request, post_id):
     post = Post.objects.get(id=post_id)
     user = request.user
-
+    # username = user.username
+    
     if Like.objects.filter(user=user, post=post).exists():
         Like.objects.filter(user=user, post=post).delete()
         post.likes.remove(user)
@@ -136,6 +138,9 @@ def like_post(request, post_id):
         post.likes.add(user)
         post.total_like += 1
         post.save()
+        if user != post.author:
+            Notification.objects.create(receiver=post.author, sender =user,like_notifcation= True, post_id=post_id,  message=f'{user.get_full_name()} Liked Your Post')
+        
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required(login_url='/login/')
@@ -290,7 +295,11 @@ def profile(request, id):
 
 @login_required(login_url='/login/')
 def suggestion(request):
-    data = User.objects.exclude(username = request.user).exclude(username = 'admin')
+    if 'search_box' in request.GET:
+        key = request.GET['search_box']
+        data = User.objects.filter(Q(first_name__icontains = key)| Q(last_name__icontains = key)).exclude(username = 'admin').exclude(username = request.user)
+    else:
+        data = User.objects.exclude(username = request.user).exclude(username = 'admin')
     return render(request,'base/suggestion.html',{'data':data})
 
 
@@ -386,11 +395,15 @@ def comment(request, id):
         user = request.user
         author = User.objects.get(username = user)
         authorprofile = Profile.objects.get(user = user)
+        
         post_obj = Post.objects.get(id = id)
+        
         comment = Comment.objects.create(author= author, authorprofile =authorprofile, post = post_obj, text = text)
         if comment:
             post_obj.total_comment= post_obj.total_comment + 1
             post_obj.save()
+            if user != post_obj.author:
+                Notification.objects.create(receiver=post_obj.author, sender =user, comment_notifcation= True, post_id=id,  message=f'{user.get_full_name()} Comment on Your Post')
     return HttpResponseRedirect(f'show_comment/{id}')
 
 
@@ -416,9 +429,14 @@ def show_replay(request, pid, cid):
         posts = Post.objects.get(id = pid)
         cmnt = Comment.objects.get(id = cid)
         replay = Replay.objects.create(author= author, authorprofile =authorprofile,post = posts, comment = cmnt, replay = replay)
+        
+        if user != cmnt.author:
+            Notification.objects.create(receiver=cmnt.author, sender =user, replay_notifcation= True, post_id=pid, comment_id = cid,  message=f'{user.get_full_name()} Replay on Your Comment')
+        
         if replay:
             posts.total_comment= posts.total_comment + 1
             posts.save()
+            
     
     return render(request, 'base/replay.html', {'posts':post, 'comments': comments, 'replays':replays})
     
@@ -433,7 +451,21 @@ def blocklist(request, bid):
     blocked_user = User.objects.get(id = bid)
     blocked_user_profile = Profile.objects.get(user = blocked_user)
     blk = Block.objects.create(author = author,authorprofile= authorprofile, blocked_user =blocked_user,blocked_user_profile=blocked_user_profile, is_block= True)
-
+    
+    authorprofile.blocklist.add(blocked_user)
+    
+    if blocked_user in authorprofile.following.all():
+        authorprofile.following.remove(blocked_user)
+        
+    if author in blocked_user_profile.following.all():
+        blocked_user_profile.following.remove(author)
+        
+    if blocked_user in authorprofile.followers.all():
+        authorprofile.followers.remove(blocked_user)
+        
+    if author in blocked_user_profile.followers.all():
+        blocked_user_profile.followers.remove(author)
+        
     return redirect('/')
 
 
@@ -441,10 +473,15 @@ def blocklist(request, bid):
 @login_required(login_url='/login/')
 def unblock(request, block_user_id):
     user = request.user
+    author = User.objects.get(username = user)
+    authorprofile = Profile.objects.get(user = author)
+    
+    
     blocked_user = User.objects.get(id = block_user_id)
     unblock_user = Block.objects.get(Q(author = user) & Q(blocked_user = blocked_user))
     if unblock_user:
         unblock_user.delete()
+        authorprofile.blocklist.remove(blocked_user)
     return redirect('showblocklist')
 
 
@@ -452,7 +489,7 @@ def unblock(request, block_user_id):
 def showblocklist(request):
     author = request.user
     users = Block.objects.filter(author = author)
-    return render(request, 'base/blocklist.html', {'users' : users, })
+    return render(request, 'base/blocklist.html', {'users' : users,})
     
     
     
@@ -464,12 +501,7 @@ def download_image(request, image_id):
     return response
 
 
-@login_required(login_url='/login/')
-def suggesions_search(request):
-    search_text = request.GET.get('search_box')
-    users_data = User.objects.filter(Q(first_name__contains=search_text) | Q(last_name__contains=search_text))
-    
-    return render(request,'base/suggesionsresult.html',{'data':users_data})
+
     
     
 @login_required(login_url='/login/')
@@ -567,10 +599,14 @@ def suggestion_follow_user(request, user_id):
 
 @login_required(login_url='/login/')
 def follower_list(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    user_profile = get_object_or_404(Profile, user=user)
+    userr = get_object_or_404(User, id=user_id)
+    user_profile = get_object_or_404(Profile, user=userr)
     
-    followers = user_profile.followers.all()
+    if 'search_box' in request.GET:
+        key = request.GET['search_box']
+        followers = user_profile.followers.filter(Q(first_name__icontains =key)|Q(last_name__icontains =key))
+    else:
+        followers = user_profile.followers.all()
     
     profile_object = None
     for follower in followers:
@@ -587,7 +623,11 @@ def following_list(request, user_id):
     user = get_object_or_404(User, id=user_id)
     user_profile = get_object_or_404(Profile, user=user)
     
-    followings = user_profile.following.all()
+    if 'search_box' in request.GET:
+        key = request.GET['search_box']
+        followings = user_profile.following.filter(Q(first_name__icontains =key)|Q(last_name__icontains =key))
+    else:
+        followings = user_profile.following.all()
     
     profile_object = None
 

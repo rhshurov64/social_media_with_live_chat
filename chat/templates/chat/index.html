@@ -16,17 +16,12 @@
                         <div class="modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="chat-header">
-                                    <div class="msg-search">
-                                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search" aria-label="search">
-                                        <a class="add" href="#"><img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/add.svg" alt="add"></a>
-                                    </div>
-
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item" role="presentation">
-                                            <button class="nav-link active" id="Open-tab" data-bs-toggle="tab" data-bs-target="#Open" type="button" role="tab" aria-controls="Open" aria-selected="true">Active</button>
+                                            <button class="nav-link active" id="Open-tab" data-bs-toggle="tab" data-bs-target="#Open" type="button" role="tab" aria-controls="Open" aria-selected="true">All</button>
                                         </li>
                                         <li class="nav-item" role="presentation">
-                                            <button class="nav-link" id="Closed-tab" data-bs-toggle="tab" data-bs-target="#Closed" type="button" role="tab" aria-controls="Closed" aria-selected="false">All</button>
+                                            <button class="nav-link" id="Closed-tab" data-bs-toggle="tab" data-bs-target="#Closed" type="button" role="tab" aria-controls="Closed" aria-selected="false">Active</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -38,43 +33,62 @@
                                         <div class="tab-content" id="myTabContent">
 
                                             <div class="tab-pane fade show active" id="Open" role="tabpanel" aria-labelledby="Open-tab">
-                                                <!-- Active chat-list start-->
+                                                <!-- All chat-list start-->
 
                                                 <div class="chat-list">
                                                     {% for userprofile in userprofile %}
+
+                                                    {% if userprofile.user not in request.user.profile.blocklist.all %}
+                                                    {% if request.user not in userprofile.blocklist.all %}
+
                                                     <a href="{% url 'chat:chat_profile' userprofile.user.username %}" class="d-flex align-items-center">
                                                         <div class="flex-shrink-0">
                                                             <img class="img-fluid" style="height: 40px; width: 40px; border-radius: 50%; " src="{{userprofile.profileimg.url}}" alt="user img">
-                                                            <span class="active"></span>
+                                                            {% if userprofile.user.onlinestatus.status == 'online' %}
+                                                            <span class="active" style="display: block; content: ''; clear: both; position: absolute; bottom: 3px; left: 34px; height: 12px; width: 12px; background-color: #00DB75; border-radius: 50%; border: 2px solid #fff;"></span>
+                                                            {% endif %}
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h3>{{userprofile.user.get_full_name}}</h3>
                                                             <p>@{{userprofile.user.username}}</p>
                                                         </div>
                                                     </a>
+
+                                                    {% endif %}
+                                                    {% endif %}
                                                     {% endfor %}
+
+                                                    
                                                 </div>
-                                                <!-- Active chat-list end -->
+                                                <!-- All chat-list end -->
 
                                             </div>
                                             <div class="tab-pane fade" id="Closed" role="tabpanel" aria-labelledby="Closed-tab">
 
-                                                <!-- All chat-list start-->
+                                                <!-- Active chat-list start-->
                                                 <div class="chat-list">
                                                     {% for userprofile in userprofile %}
+                                                    {% if userprofile.user.onlinestatus.status == 'online' %}
+                                                    {% if userprofile.user not in request.user.profile.blocklist.all %}
+                                                    {% if request.user not in userprofile.blocklist.all %}
                                                     <a href="{% url 'chat:chat_profile' userprofile.user.username %}" class="d-flex align-items-center">
                                                         <div class="flex-shrink-0">
                                                             <img class="img-fluid" style="height: 40px; width: 40px; border-radius: 50%; " src="{{userprofile.profileimg.url}}" alt="user img">
-                                                            <span class="active"></span>
+                                                            {% if userprofile.user.onlinestatus.status == 'online' %}
+                                                            <span class="active" style="display: block; content: ''; clear: both; position: absolute; bottom: 3px; left: 34px; height: 12px; width: 12px; background-color: #00DB75; border-radius: 50%; border: 2px solid #fff;"></span>
+                                                            {% endif %}
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h3>{{userprofile.user.get_full_name}}</h3>
                                                             <p>@{{userprofile.user.username}}</p>
                                                         </div>
                                                     </a>
+                                                    {% endif %}
+                                                    {% endif %}
+                                                    {% endif %}
                                                     {% endfor %}
                                                 </div>
-                                                <!-- All chat-list End -->
+                                                <!-- Active chat-list End -->
                                             </div>
                                         </div>
 

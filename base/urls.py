@@ -31,7 +31,6 @@ urlpatterns = [
     path('unblock/<int:block_user_id>/', views.unblock, name='unblock'),
     path('download_image/<int:image_id>/', views.download_image, name='download_image'),
     path('reports/<str:username>/', views.reports, name='reports'),
-    path('suggesions_search/', views.suggesions_search, name='suggesions_search'),
     path('follow/<int:user_id>/', views.follow_user, name='follow_user'),
     path('suggestion_follow_user/<int:user_id>/', views.suggestion_follow_user, name='suggestion_follow_user'),
     path('followers/<int:user_id>/', views.follower_list, name='follower_list'),

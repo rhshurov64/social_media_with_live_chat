@@ -1,4 +1,19 @@
 <style>
+
+  .notification-circle {
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    padding: 10px;
+    background: #fff;
+    border: 3px solid #000;
+    color: #000;
+    text-align: center;
+    font: 2px Arial, sans-serif;
+  }
+  
+
+
   .icon-button {
     position: relative;
     display: flex;
@@ -81,14 +96,20 @@
           
           <a href="{% url 'video_conference:home' %}"><i class="fa-solid fa-video fa-lg me-4" style="color: #FFFFFF;"></i></a>
           <a href="{% url 'chat:chat_index' %}"><i class="fa-solid fa-comments fa-lg me-4" style="color: #FFFFFF;"></i></a>
-          <a href=""><i class="fa-solid fa-bell fa-lg" style="color: #FFFFFF;"></i></a>
-          
+
+          <div class="col d-inline-block">
+            <a style="color: #FFFFFF;" href="{% url 'chat:notification' %}"><i class="fa-solid fa-bell fa-lg" style="color: #FFFFFF;"></i>
+              
+              {% if notification_count > 0 %}
+              <p style=" text-align:center; padding: 0px 3px; color:white; display: inline;  margin: auto; margin-left: 0px; font-size: 15px; border-radius: 50%; background-color:red; "><b>{{notification_count}}</b></p>
+              {% endif %}
+                
+            </a>
+          </div>
         </div>
+        
         <div class="dropdown d-flex align-items-lg-center mt-0 me-lg-4 me-5 ms-5">
-          <!-- <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton2"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{user.profile.profileimg.url}}" width="30" height="30" class="rounded-circle">
-          </button> -->
+          
           <a class="btn btn-link dropdown-toggle" style="margin-right: 50px;" type="button" id="dropdownMenuButton2"
           data-bs-toggle="dropdown" aria-expanded="false">
             <img src="{{ user.profile.profileimg.url }}" width="40" height="40" class="rounded-circle">
@@ -102,7 +123,7 @@
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="/logout/"><i class="fa-solid fa-power-off me-2"></i>Logout</a></li>
+            <li><a class="dropdown-item" href="/logout/" onclick="return confirm('Are you sure?');"><i class="fa-solid fa-power-off me-2"></i>Logout</a></li>
           </ul>
         </div>
 
@@ -115,3 +136,4 @@
       </div>
     </div>
   </nav>
+

@@ -127,21 +127,33 @@
                     <div class="container">
                         {% for d in data|slice:"0:3" %}
                             {% if d not in request.user.profile.following.all %}
-                            <div class="row mb-2" style="border: 2px solid #F6F6F6; padding:10px; ">
-                                <div class="col-2">
-                                    <img style="height: 60px; width:60px; border-radius:50%; border-color:#ECECEC; "
-                                        src="{{ d.profile.profileimg.url }}" class="profile_img mt-1"
-                                        alt="user profile images">
+                            {% if d not in request.user.profile.followers.all %}
 
-                                </div>
+                            
+                                {% if d not in request.user.profile.blocklist.all %}
+                                
+                                {% if request.user not in d.profile.blocklist.all %}
+                                    
+                                <div class="row mb-2" style="border: 2px solid #F6F6F6; padding:10px; ">
+                                    <div class="col-2">
+                                        <img style="height: 60px; width:60px; border-radius:50%; border-color:#ECECEC; "
+                                            src="{{ d.profile.profileimg.url }}" class="profile_img mt-1"
+                                            alt="user profile images">
 
-                                <div class="col-9 ms-2 mt-2">
-                                    <a href="{% url 'profile' d.id %}">
-                                        <h6 style="color: black;">{{ d.get_full_name }}</h6>
-                                        <p style="margin-top: -7px;" >@{{ d.username }}</p>
-                                    </a>
+                                    </div>
+
+                                    <div class="col-9 ms-2 mt-2">
+                                        <a href="{% url 'profile' d.id %}">
+                                            <h6 style="color: black;">{{ d.get_full_name }}</h6>
+                                            <p style="margin-top: -7px;" >@{{ d.username }}</p>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
+                                {% endif %}
+                                
+                                {% endif %}
+
+                            {% endif %}
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -192,7 +204,7 @@
                         </div>
 
                         <div class="col-1 offset-8  p-2">
-                            <input type="submit" class="btn btn-sm btn-outline-success px-5" value="Share">
+                            <input type="submit" onclick="return confirm('Are you sure?');" class="btn btn-sm btn-outline-success px-5" value="Share">
                         </div>
 
                     </div>
@@ -211,7 +223,8 @@
                 
 
                 {% for p in posts %}
-
+                {% if p.author not in request.user.profile.blocklist.all %}
+                {% if request.user not in p.authorprofile.blocklist.all %}
 
                 <div class="bootstrap snippets bootdey" style="overflow: hidden;">
                     <div class="col">
@@ -240,7 +253,7 @@
                                                     <a class="me-3" href="{% url 'postedit' p.id %}" title="Edit">
                                                         <i class="fa-regular fa-pen-to-square fa-xs"></i>
                                                     </a>
-                                                    <a href="/postdelete?post_id={{p.id}}" title="Delete">
+                                                    <a href="/postdelete?post_id={{p.id}}" onclick="return confirm('Are you sure?');" title="Delete">
                                                         <i class="fa-solid fa-trash fa-xs"></i>
                                                     </a>
 
@@ -292,7 +305,7 @@
                                     
                                     {% if p.postimg %}
                                         
-                                    <a title="Download" style="margin-left: 50px;" href="{% url 'download_image' p.id %}" download><i class="fa-solid fa-download fa-lg"></i></a>
+                                    <a title="Download" style="margin-left: 50px;" href="{% url 'download_image' p.id %}" download><i class="fa-solid fa-download fa-lg" onclick="return confirm('Donwload This Image?');"></i></a>
 
                                     {% endif %}
                                 </div>
@@ -302,7 +315,8 @@
                         </div>
                     </div>
                 </div>
-
+                {% endif %}
+                {% endif %}
                 {% endfor %}
             </div>
 

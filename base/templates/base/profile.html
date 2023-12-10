@@ -299,7 +299,7 @@
                                                         <a class="me-3" href="{% url 'postedit' p.id %}" title="Edit">
                                                             <i class="fa-regular fa-pen-to-square fa-xs"></i>
                                                         </a>
-                                                        <a href="/profile_post_delete?post_id={{p.id}}" title="Delete">
+                                                        <a href="/profile_post_delete?post_id={{p.id}}" onclick="return confirm('Are you sure?');" title="Delete">
                                                             <i class="fa-solid fa-trash fa-xs"></i>
                                                         </a>
 

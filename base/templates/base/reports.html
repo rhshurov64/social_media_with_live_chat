@@ -34,6 +34,7 @@
                             <th scope="col">Total Comment</th>
                             <th scope="col">Total Follower</th>
                             <th scope="col">Total Followings</th>
+                            <th scope="col">Blocked User</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,6 +46,7 @@
                             <td>{{ total_comments }}</td>
                             <td>{{ overview.followers.count }}</td>
                             <td>{{ overview.following.count }}</td>
+                            <td>{{ overview.blocklist.count }}</td>
                             
                             </tr>
                             <tr>

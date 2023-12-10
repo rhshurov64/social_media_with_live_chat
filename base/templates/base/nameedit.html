@@ -16,7 +16,7 @@
                         {% csrf_token %}
                         {{form.as_p}}
                         
-                        <input type="submit" value="Save" class="btn btn-sm btn-success mt-5 px-5">
+                        <input type="submit" value="Save" onclick="return confirm('Are you sure?');" class="btn btn-sm btn-success mt-5 px-5">
                         <!-- <a href="{% url 'index' %}" class="btn btn-sm btn-danger mt-5 ms-2">Back To Home</a> -->
             
                     </form>

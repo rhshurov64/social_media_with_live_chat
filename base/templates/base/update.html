@@ -23,7 +23,7 @@
             <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{form.as_p}}
-            <input type="submit" value="Save" class="btn btn-sm btn-success px-4 my-3 ms-5 me-5">
+            <input type="submit" value="Save" class="btn btn-sm btn-success px-4 my-3 ms-5 me-5" onclick="return confirm('Are you sure?');">
             <a href="{% url 'index' %}" class="btn btn-sm btn-danger ">Back To Home</a>
 
         </form>

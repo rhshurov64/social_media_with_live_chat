@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from base.models import *
 from .models import *
 from django.contrib.auth.models import User
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -36,3 +36,31 @@ def chat_profile(request, username):
     
     
     return render(request, 'chat/chatpage.html', {'alluser': alluser, 'alluserprofile': alluserprofile ,'userdetails': userdetails, 'userprofile': userprofile, 'chatbox_profile':chatbox_profile, 'username':username, 'messages':messages, 'status_user':status_user})
+
+
+
+def notification(request):
+    user_notifications = Notification.objects.filter(receiver=request.user).order_by('-timestamp')
+    
+    # Update is_read for all notifications
+    user_notifications.update(is_read=True)
+    
+    
+    
+    
+   
+    return render(request, 'chat/notification.html', {'user_notifications':user_notifications})
+
+def notification_delete(request, id):
+    notification = Notification.objects.get(id=id)
+    notification.delete()
+    return redirect('chat:notification')
+
+
+
+def custom_processor(request):
+    if request.user.is_authenticated:
+        notification_count = Notification.objects.filter(receiver=request.user, is_read= False).count()
+    else:
+        notification_count = 0
+    return {"notification_count": notification_count}
