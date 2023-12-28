@@ -1,12 +1,12 @@
 # Soical Media Project With Live Chat and Video Conference System.
 
-*Technology**
+**Technology**
 
-1. Backend: Django MVT, Django-channels, Signals,ZegoCloud
+Backend: Django MVT, Django-channels, Signals,ZegoCloud
 
-2.Front-End: HTML-5, CSS-3, Bootstrap, Jquery, Ajax.
+Front-End: HTML-5, CSS-3, Bootstrap, Jquery, Ajax.
 
-3. Database: Sqlite
+Database: Sqlite
 
 
 **User Requirements**
