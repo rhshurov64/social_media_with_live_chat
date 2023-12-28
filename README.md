@@ -2,9 +2,9 @@
 
 *Technology**
 
-Backend: Django MVT, Django-channels, Signals,ZegoCloud
-Front-End: HTML-5, CSS-3, Bootstrap, Jquery, Ajax
-Database: Sqlite
+1. Backend: Django MVT, Django-channels, Signals,ZegoCloud.
+2.Front-End: HTML-5, CSS-3, Bootstrap, Jquery, Ajax.
+3. Database: Sqlite
 
 
 **User Requirements**
