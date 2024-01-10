@@ -9,6 +9,55 @@ Front-End: HTML-5, CSS-3, Bootstrap, Jquery, Ajax.
 Database: Sqlite
 
 
+**Design Part:**
+**--------------**
+
+**DashBoard**
+![Alt text](Design_Screenshot/dashboard.png)
+
+**Chat Page**
+![Alt text](Design_Screenshot/chat_page.png)
+
+**Video Conference**
+![Alt text](Design_Screenshot/video_conference.png)
+
+**Personal profile**
+![Alt text](Design_Screenshot/Logged_User_Profile.png)
+
+**Other User Profile**
+![Alt text](Design_Screenshot/other_user_profile.png)
+
+**Post Edit Box**
+![Alt text](Design_Screenshot/post_edit.png)
+
+**Search Panel**
+![Alt text](Design_Screenshot/search_panel.png)
+
+**Comment section**
+![Alt text](Design_Screenshot/comment_section.png)
+
+**Replay Section**
+![Alt text](Design_Screenshot/replay_section.png)
+
+**Bocklist**
+![Alt text](Design_Screenshot/blocklist.png)
+
+**Login History**
+![Alt text](Design_Screenshot/login_history.png)
+
+**Post History**
+![Alt text](Design_Screenshot/post_history.png)
+
+**Followers List**
+![Alt text](Design_Screenshot/followers_list.png)
+
+**Following List**
+![Alt text](Design_Screenshot/following_list.png)
+
+**Post Liked Users List**
+![Alt text](Design_Screenshot/liked_list.png)
+
+
 **User Requirements**
 
 1.	User Authentication and Authorization
@@ -80,53 +129,3 @@ Database: Sqlite
 11.	User will get notifications for actions related to their profile.
 12.	The user can turn on/off the camera and mike in a video conference.
 13.	Users can search for other users, posts, or content using keywords, hashtags, or specific user names.
-
-
-**Design Part:**
-**--------------**
-
-**DashBoard**
-![Alt text](Design_Screenshot/dashboard.png)
-
-**Chat Page**
-![Alt text](Design_Screenshot/chat_page.png)
-
-**Video Conference**
-![Alt text](Design_Screenshot/video_conference.png)
-
-**Personal profile**
-![Alt text](Design_Screenshot/Logged_User_Profile.png)
-
-**Other User Profile**
-![Alt text](Design_Screenshot/other_user_profile.png)
-
-**Post Edit Box**
-![Alt text](Design_Screenshot/post_edit.png)
-
-**Search Panel**
-![Alt text](Design_Screenshot/search_panel.png)
-
-**Comment section**
-![Alt text](Design_Screenshot/comment_section.png)
-
-**Replay Section**
-![Alt text](Design_Screenshot/replay_section.png)
-
-**Bocklist**
-![Alt text](Design_Screenshot/blocklist.png)
-
-**Login History**
-![Alt text](Design_Screenshot/login_history.png)
-
-**Post History**
-![Alt text](Design_Screenshot/post_history.png)
-
-**Followers List**
-![Alt text](Design_Screenshot/followers_list.png)
-
-**Following List**
-![Alt text](Design_Screenshot/following_list.png)
-
-**Post Liked Users List**
-![Alt text](Design_Screenshot/liked_list.png)
-
