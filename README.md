@@ -74,24 +74,24 @@ Database: Sqlite
 
 **System Requirement**
 
-1.	User Authentication & Authorization:
+
   1.1 Multiple Users can create accounts using their valid and unique email.
   1.2 Users need to provide their First Name, Last Name, and Username
   1.3 Users must need to verify the email address.
   1.4 Users can log in with the registered credentials details.
 
-2.	Profile Management:
+
   2.1 For each user a dynamic profile will generated with all personal details and post details. 
   2.2 Users can visit others' profiles and also their own profiles.
   2.3	Users can edit, and delete their profile information like First name, last name, bio, address, country, about, profile picture, and other social media profile links. 
 
-3.	Friend/Connection Management:
+
   3.1 Users can follow/unfollow other users. 
   3.2 The system will suggest unfollowed users to increase connections 
   3.3 Users can see their own Following & Followers count and list
   3.4 Users can also see others following & followers count and list
   	
-4. Blocklist Management
+
   4.1 Users can block/unblock other users. 
   4.2 Users can manage their blocklist, including viewing and removing blocked users.
   4.3 Blocked users cannot view the profile, or posts, and cannot send messages.
@@ -104,7 +104,7 @@ Database: Sqlite
   5.3 User can like and comment on their posts and also other’s posts. 
   5.4  User can edit, and delete their own post.
 
-6.	Like, Comment Management
+
   6.1 Users can like, and comment on other's posts. 
   6.2 Users can also like, and comment on their posts. 
   6.3 Users can replay the comment. 
@@ -112,13 +112,13 @@ Database: Sqlite
   6.5 Total Likes and comments count will show for each post
   6.6 Users can see the liked users list by clicking on the count.
 
-7.	Live Chat:
+
   7.1 Users can engage in one-on-one chats. 
   7.2 All the registered users will be available on the chatting page except blocked users 
   7.3 Users can see the online/offline status of all users 
   7.4 Message will be sent and received without refreshing the page
 
-8.	Notifications:
+
   8.1 Users receive notifications for various activities, including messages, likes, and comments. 
   8.2 5 types of notifications are there, Like, comment, replay, follow, and message notification
   8.3 All the notifications are visible on the notification page in detail.
@@ -126,7 +126,7 @@ Database: Sqlite
   8.5 Unread notifications count will be visible in the notification icon 
   8.6 Users can delete the notification
 
-9.	Video Conferencing:
+
   9.1 Users can join video conferences with room ID and link. 
   9.2 Users can create new conference meetings and share room IDs or links. 
   9.3 The system supports multi-user video conferences. 
