@@ -72,7 +72,8 @@ Database: Sqlite
 11. Delete Account
 
 
-**System Requirement**
+
+**System Requirements for all the user requirements**
 
 
   1.1 Multiple Users can create accounts using their valid and unique email.
@@ -98,7 +99,7 @@ Database: Sqlite
   4.4 Users also cannot see the blocked user the profile, or posts, and cannot send messages
   4.5 Blocked user follow following status will be reset. 
 
-5.	Post Management:
+
   5.1 Users can share their thoughts by posting status including image. 
   5.2 Status will appear on others' home pages and the owner's profile page. 
   5.3 User can like and comment on their posts and also other’s posts. 
