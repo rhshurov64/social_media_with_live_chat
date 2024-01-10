@@ -1,4 +1,4 @@
-![image](https://github.com/rhshurov64/social_media_with_live_chat/assets/42247328/0d936cf8-ef47-4af3-97bd-af89eb4161e8)![image](https://github.com/rhshurov64/social_media_with_live_chat/assets/42247328/f8057b0f-cdbc-46fa-a7f3-5b42236314f7)# Soical Media Project With Live Chat and Video Conference System.
+#Soical Media Project With Live Chat and Video Conference System.
 
 **Technology**
 
