@@ -1,46 +1,30 @@
-# Soical Media Project With Live Chat and Video Conference System
+# Soical Media Project With Live Chat and Video Conference System.
+
+**Technology**
+
+Backend: Django MVT, Django-channels, Signals,ZegoCloud
+
+Front-End: HTML-5, CSS-3, Bootstrap, Jquery, Ajax.
+
+Database: Sqlite
 
 
-**----------------------------------Introduction------------------------------------------**
+**User Requirements**
 
-**I am developing a django app for complete and fully functional social  media system with live chat and video conferecing system, where new user can do registraion and need to 
-verifid account by email verification.  After verify the account user will redirect to profile setup page. User can submit their personal information for the profiel. With this
-infomation each user profile will manage. User can do POST with image or without image. User can do like, comment and replay on the posts. User can edit/delete on his/her own 
-post, comment and replay. User can also edit his own post and profile. Each will give permission like other social media for the edit and delete operation. User can search and for 
-people and make new frineds by following them. User can also unfollow friends. User can also block users to avoid wrong things. User has a separate page for live chatting where 
-user can filter the online and offline users and can do real time chatting. I have also implement a video conference system by used Zegocloud API where users can create new meeting
-also can join other meeting by the link**
-
-
-
-
-**---------------------------------Technology--------------------------------**
-
-**Front-End**: HTML-5, CSS-3, Bootstrap, Jquery
-
-**Backend**: Django MVT, Django-channels, Signals, WebRTC,
-
-**Database**: Sqlite
-
-
-
-
-
-**----------------------------------User Requirements-----------------------------------**
-
-1.	User Authentication and Authorization (Registraion, Email Verification, Login, Permissions)
+1.	User Authentication and Authorization
 2.	Profile Management
 3.	Connection/Friend Management
 4.	Post Management
 5.	Like, Comment, Replay Management
-6.	Follow Follwer Management
+6. Followerns/Follwings Management
+7. BlockList Management 
 7.	Live Chatting Management
-8.	Notification Management
+8.	Dynamic Notification Management
 9.	Video Conference System
+10.Report Generate
 
 
-
-**--------------------------------System Requirement-------------------------------------**
+**System Requirement**
 
 1.	User Registration:
 •	Multiple Users can create accounts using their valid email.
@@ -81,7 +65,7 @@ also can join other meeting by the link**
 
 
 
-**----------------------------------Functional Requirements--------------------------**
+**Functional Requirements**
 
 1.	The user needs to verify the mail address, a Verification link will be sent to the email address.
 2.	Only email Verified users can log in.
@@ -97,16 +81,3 @@ also can join other meeting by the link**
 12.	The user can turn on/off the camera and mike in a video conference.
 13.	Users can search for other users, posts, or content using keywords, hashtags, or specific user names.
 
-
-
-**-----------------------------Non-Functional Requirements---------------------------**
-
-Performance:
-•	The system has the ability to handle multiple users.
-
-Security:
-•	Secure user authentication and authorization mechanisms to protect user accounts and personal information.
-•	Only verified user can login and see others profile.
-
-Data Backup and Recovery:
-•	All the data will be saved in database.
