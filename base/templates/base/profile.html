@@ -137,15 +137,15 @@
                                 {% endif %}
                                 {% if profile_data.linkdin %}
                                 <a target="_blank" href="{{ profile_data.linkdin }}" title="Facebook"><i
-                                    class="fa-brands fa-facebook"></i></a>
+                                    class="fa-brands fa-linkdin"></i></a>
                                 {% endif %}
                                 {% if profile_data.twitter %}
                                 <a target="_blank" href="{{ profile_data.twitter }}" title="Facebook"><i
-                                    class="fa-brands fa-facebook"></i></a>
+                                    class="fa-brands fa-twitter"></i></a>
                                 {% endif %}
                                 {% if profile_data.github %}
                                 <a target="_blank" href="{{ profile_data.github }}" title="Facebook"><i
-                                    class="fa-brands fa-facebook"></i></a>
+                                    class="fa-brands fa-github"></i></a>
                                 {% endif %}
 
                                 {% if profile_data.facebook and profile_data.linkdin and profile_data.twitter and profile_data.github is None %}
@@ -318,10 +318,17 @@
                                 <div class="post-description">
                                     <p style="margin-top: -30px;">{{p.text}}</p>
 
-                                    {% if p.postimg %}
-                                    <img class="mb-3" style="height: 400px; width:auto;" src="{{ p.postimg.url }}" alt="">
-
-
+                                    {% if p.images.all %}
+                                    {% for image in p.images.all %}
+                                        {% if image.image %}
+                                        <div style="position: relative; display: inline-block; margin: 0 10px 10px 0;">
+                                            <a title="Download" style="position: absolute; top: 0; right: 0;" href="{% url 'download_image' image.id %}" download>
+                                                <i style="font-size: 1.5em;" class="fa-solid fa-download"></i>
+                                            </a>
+                                            <img style="height: 200px; width:auto;" src="{{ image.image.url }}" onclick="this.requestFullscreen()" alt="Image">
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
                                     {% endif %}
 
                                     <div class="" style="margin-top: ;">
@@ -344,11 +351,11 @@
                                             <h6 class="ms-3" style="display: inline;">{{p.total_comment}}</h6>
 
                                         </div>
-                                        {% if p.postimg %}
+                                        <!-- {% if p.postimg %}
                                         
                                         <a style="margin-left: 50px;" title="Download" href="{% url 'download_image' p.id %}" download><b><i class="fa-solid fa-download fa-lg"></i></b></a>
 
-                                        {% endif %}
+                                        {% endif %} -->
                                     </div>
                                 </div>
                                 

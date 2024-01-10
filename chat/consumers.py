@@ -27,6 +27,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         
+        
+        
         await self.accept()
         
     async def receive(self, text_data=None, bytes_data=None):
@@ -53,11 +55,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'type': 'chat.message',
                 'message': message,
                 'sender' : str(sender),
-                'time': formatted_time
+                'time': formatted_time,
+                
             }
         )
         
+       
         
+    
+    
         
     async def chat_message(self, event):
         sender_username = event['sender']
@@ -77,12 +83,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
         
         
+        
+        
     async def disconnect(self, close_code):
         print('Disconnect')
         await self.channel_layer.group_discard(
             self.group_name,
             self.channel_name
         )
+        
+       
         
     @database_sync_to_async
     def get_user(self, other_username):
@@ -96,3 +106,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def create_notification(self, receiver, sender, message, time):
         Notification.objects.create(receiver=receiver, sender =sender, message=message, timestamp=time)
+        
+        
+        
+    

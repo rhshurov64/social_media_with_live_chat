@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+import os
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 # Create your models here.
 
 
@@ -53,6 +55,17 @@ class Post(models.Model):
     
     def __str__(self):
         return str(self.id)
+    
+class Image(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, null=True, blank=True,  related_name='images')
+    image = models.ImageField(upload_to='post_image/', max_length=250, null=True, blank= True, default = None)
+    
+    def __str__(self):
+        return str(self.image)
+
+    
+
+
     
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

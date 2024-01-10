@@ -11,7 +11,6 @@
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                   <button class="nav-link active" id="nav-overview-tab" data-bs-toggle="tab" data-bs-target="#nav-overview" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Overview</button>
                   <button class="nav-link" id="nav-post-tab" data-bs-toggle="tab" data-bs-target="#nav-post" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Post History</button>
-                  <button class="nav-link" id="nav-engagement-tab" data-bs-toggle="tab" data-bs-target="#nav-engagement" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Others Post Engagement</button>
                   <button class="nav-link" id="nav-usage-tab" data-bs-toggle="tab" data-bs-target="#nav-usage" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Usage History</button>
                 </div>
             </nav>
@@ -65,8 +64,8 @@
                         <table class="table table-bordered table-hover">
                         <thead class="thead-dark">
                             <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">POST ID</th>
+                            <th scope="col">SL</th>
+                            <th scope="col">POST</th>
                             <th scope="col">Created Date</th>
                             <th scope="col">Last Updated Date</th>
                             <th scope="col">Total Like</th>
@@ -79,7 +78,7 @@
                             
                             
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ post.id }}</td>
+                            <td>{{ post.text|truncatechars:7 }} <a href="{% url 'show_comment' post.id %}">View Post</a> </td>
                             <td>{{ post.created_at }}</td>
                             <td>{{ post.updated_at }}</td>
                             <td>{{ post.total_like }}</td>
@@ -122,7 +121,14 @@
                             
                             <td>{{ forloop.counter }}</td>
                             <td>{{ log.login_time }}</td>
+                            
+                            {% if log.logout_time == None %}
+                            <td>Active</td>
+                            {% else %}
                             <td>{{ log.logout_time }}</td>
+                            {% endif %}
+                                
+                            
                             <td>{{ log.duration_minutes }}</td>
                             
 

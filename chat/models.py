@@ -22,6 +22,7 @@ class Notification(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
     like_notifcation = models.BooleanField(default=False)
+    follow_notifcation = models.BooleanField(default=False)
     post_id = models.IntegerField(default=None, null=True)
     comment_id = models.IntegerField(default=None, null=True)
     comment_notifcation = models.BooleanField(default=False)

@@ -8,11 +8,11 @@
 <h4 style="margin-top: 15px;" class="text-center">All Notification's</h4>
 <hr>
 
-<div class="container">
+<div class="container" id="notification-list">
     {% for user_notification in user_notifications %}
     
     {% if user_notification.receiver != user_notification.sender %}
-    <div style="width: 70%; margin:auto;" class="mid-div ">
+    <div style="width: 70%; margin:auto; " class="mid-div">
         <div style="border: 1px solid #C7C8C9; padding : 10px;" class="row mb-3">
             <div class="col">
                 <div class="notification"><p>{{ user_notification.message }}</a></p>
@@ -30,19 +30,23 @@
                 {% elif user_notification.replay_notifcation == True %}
                 <a href="{% url 'show_replay' user_notification.post_id user_notification.comment_id %}" class="btn btn-sm btn-primary">View Replay</a>
 
+                {% elif user_notification.follow_notifcation == True %}
+                <a href="{% url 'profile' user_notification.sender.id %}" class="btn btn-sm btn-primary">View Profile</a>
+
                 {% else %}
                 <a href="{% url 'chat:chat_profile' user_notification.sender.username %}" class="btn btn-sm btn-primary">View Message</a>
                     
                 {% endif %}
                     
                 
-                <a href="{% url 'chat:notification_delete' user_notification.id %}" class="btn btn-sm btn-danger">Delete</a>
+                <a href="{% url 'chat:notification_delete' user_notification.id %}" onclick="return confirm('Are you sure?');" class="btn btn-sm btn-danger">Delete</a>
             </div>
         </div>
     </div>
     {% endif %}
     {% endfor %}
 </div>
+
 
 
 

@@ -5,6 +5,7 @@ urlpatterns = [
     path('login/', views.login, name ='login'),
     path('logout/', views.user_logout, name ='logout'),
     path('signup/', views.signup, name ='signup'),
+    path('reset/', views.reset_password, name ='reset'),
     path('index/', views.index, name ='index'),
     path('', views.index, name ='index'),
     path('profile/<int:id>/', views.profile, name ='profile'),
@@ -17,6 +18,7 @@ urlpatterns = [
     path('render_/', views.rendertosetting, name ='render_'),
     path('verify/<slug:token>/', views.account_verify, name ='verify'),
     path('like_post/<int:post_id>/', views.like_post, name='like_post'),
+    path('like_list/<int:post_id>/', views.like_list, name='like_list'),
     path('postedit/<int:id>/', views.postedit, name='postedit'),
     path('commentedit/<int:id>/', views.commentedit, name='commentedit'),
     path('replayedit/<int:id>/', views.replayedit, name='replayedit'),
@@ -35,6 +37,7 @@ urlpatterns = [
     path('suggestion_follow_user/<int:user_id>/', views.suggestion_follow_user, name='suggestion_follow_user'),
     path('followers/<int:user_id>/', views.follower_list, name='follower_list'),
     path('following/<int:user_id>/', views.following_list, name='following_list'),
+    path('delete_account/', views.delete_account, name='delete_account'),
 ]
 
 

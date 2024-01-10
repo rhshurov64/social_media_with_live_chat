@@ -22,8 +22,8 @@
     <form action="" method="POST"enctype="multipart/form-data" >{% csrf_token %}
   
         <div class="col-8 mb-3">
-            <label for="formFile" class="form-label mb-2">Upload Profile Image</label>
-            <input class="form-control image shadow-none bg-gray-100" name='image' type="file" id="formFile">
+            <label for="formFile" class="form-label mb-2">Upload Profile Image *</label>
+            <input class="form-control image shadow-none bg-gray-100" name='image' type="file" id="formFile" required>
         </div>
 
 

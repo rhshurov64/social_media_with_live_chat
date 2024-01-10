@@ -53,7 +53,6 @@
 </style>
 
 
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-success p-0">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
@@ -101,7 +100,7 @@
             <a style="color: #FFFFFF;" href="{% url 'chat:notification' %}"><i class="fa-solid fa-bell fa-lg" style="color: #FFFFFF;"></i>
               
               {% if notification_count > 0 %}
-              <p style=" text-align:center; padding: 0px 3px; color:white; display: inline;  margin: auto; margin-left: 0px; font-size: 15px; border-radius: 50%; background-color:red; "><b>{{notification_count}}</b></p>
+              <p style=" text-align:center; padding: 0px 3px; color:white; display: inline;  margin: auto; margin-left: 0px; font-size: 15px; border-radius: 50%; background-color:red; "><b id="notification-count">{{notification_count}}</b></p>
               {% endif %}
                 
             </a>
@@ -118,12 +117,13 @@
             <li><a class="dropdown-item" href="/index/"> <i class="fa-solid fa-bars me-2"></i>Dashboard</a></li>
             <li><a class="dropdown-item" href="{% url 'profile' request.user.id %}"><i class="fa-solid fa-user me-2"></i>Profile</a></li>
             <li><a class="dropdown-item" href="{% url 'showblocklist' %}"><i class="fa-solid fa-ban me-2"></i>Blocklist</a></li>
-            <li><a class="dropdown-item" href="{% url 'reports' request.user %}"><i class="fa-solid fa-ban me-2"></i>Report</a></li>
+            <li><a class="dropdown-item" href="{% url 'reports' request.user %}"><i class="bi bi-clock-history me-2"></i>Account History</a></li>
             <!-- <li><a class="dropdown-item" href="/setting/">Setting</a></li> -->
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="/logout/" onclick="return confirm('Are you sure?');"><i class="fa-solid fa-power-off me-2"></i>Logout</a></li>
+            <li><a class="dropdown-item text-danger fw-bold"" href="/delete_account/" onclick="return confirm('Are you sure want to delete your account?');"><i class="bi bi-trash me-2"></i>Delete Account</a></li>
+            <li><a class="dropdown-item text-warning fw-bold"" href="/logout/" onclick="return confirm('Are you sure?');"><i class="fa-solid fa-power-off me-2"></i>Logout</a></li>
           </ul>
         </div>
 
@@ -136,4 +136,3 @@
       </div>
     </div>
   </nav>
-

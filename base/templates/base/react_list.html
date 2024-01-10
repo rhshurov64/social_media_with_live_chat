@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <h4 style="margin-top: 15px;" class="text-center">User's who liked the post</h4>
+        <hr>
+        <div class="col">
+            {% for user in post.likes.all %}
+
+            <div class="row mb-2"
+                style="border: 2px solid #F6F6F6; padding:10px; ">
+                <div class="col-1">
+                    <img
+                        style="height: 60px; width:60px; border-radius:50%; border-color:#ECECEC; "
+                        src="{{ user.profile.profileimg.url }}"
+                        class="profile_img mt-1"
+                        alt="user profile images">
+
+                </div>
+
+                <div style="margin-left: -40px;" class="col-8 mt-2">
+                    <a href="{% url 'profile' user.id %}">
+                        <h6 style="color: black;">{{ user.get_full_name }}</h6>
+                        <p style="margin-top: -7px;">@{{ user.username }}</p>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+    
+{% endblock content %}
+    
+
+

@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
+@login_required(login_url='/login/')
 def index(request):
     user = request.user
     alluser = User.objects.all()
@@ -13,7 +15,7 @@ def index(request):
     userprofile = Profile.objects.exclude(user = user)
     return render(request, 'chat/index.html', {'alluser': alluser, 'alluserprofile': alluserprofile ,'userdetails': userdetails, 'userprofile': userprofile})
 
-
+@login_required(login_url='/login/')
 def chat_profile(request, username):
     user = request.user
     alluser = User.objects.all()
@@ -42,15 +44,13 @@ def chat_profile(request, username):
 def notification(request):
     user_notifications = Notification.objects.filter(receiver=request.user).order_by('-timestamp')
     
-    # Update is_read for all notifications
     user_notifications.update(is_read=True)
-    
-    
     
     
    
     return render(request, 'chat/notification.html', {'user_notifications':user_notifications})
 
+@login_required(login_url='/login/')
 def notification_delete(request, id):
     notification = Notification.objects.get(id=id)
     notification.delete()
@@ -64,3 +64,4 @@ def custom_processor(request):
     else:
         notification_count = 0
     return {"notification_count": notification_count}
+

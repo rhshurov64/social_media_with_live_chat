@@ -19,6 +19,7 @@ from chat.models import Notification
 
 
 
+
 @login_required(login_url='/login/')
 def index(request):
     data = User.objects.exclude(username = request.user).exclude(username = 'admin')
@@ -27,20 +28,28 @@ def index(request):
     post = Post.objects.filter(username = user)
     total_post = len(post)
     comments = Comment.objects.all()
-    
+    postimg = []
     current_user = request.user
     profile = Profile.objects.get(user = current_user)
+    
     
     if request.method == "POST":
         user = request.user
         author = User.objects.get(username = user)
         authorprofile = Profile.objects.get(user = user)
         text = request.POST['text']
-        postimg = request.FILES.get('image', None)
-        post = Post.objects.create(author = author, authorprofile = authorprofile, username = user, text=text, postimg = postimg)
+        postimg = request.FILES.getlist('image', None)
+        post = Post.objects.create(author = author, authorprofile = authorprofile, username = user, text=text)
+        
+        
         if post:
+            if postimg:
+                for image in postimg:
+                    # print(image)
+                    Image.objects.create(post = post, image = image)
             profile.total_post = profile.total_post + 1
             profile.save()
+            
     
     user = request.user
     user_object = User.objects.get(username = user)
@@ -59,7 +68,17 @@ def index(request):
         following_profile_object = Profile.objects.filter(user = following)
         print(following_profile_object)
         
-    return render(request,'base/home.html', {'data':data, 'posts':status, 'total_post':total_post, 'comments': comments, 'user_profile': user_profile,'followers':followers, 'followings': followings, 'follower_profile_object': follower_profile_object, 'following_profile_object':following_profile_object, 'user_object':user_object})
+    
+    post_like = {}
+    for post in status:
+        likes = Like.objects.filter(post=post)
+        post_like[post.id] = [like.user for like in likes]
+        
+    
+    items = [1, 2, 3, 4, 5]  # Your list of items
+    counter = 0
+    
+    return render(request,'base/home.html', {'counter':counter ,'items':items,'data':data, 'posts':status, 'total_post':total_post, 'comments': comments, 'user_profile': user_profile,'followers':followers, 'followings': followings, 'follower_profile_object': follower_profile_object, 'following_profile_object':following_profile_object, 'user_object':user_object, 'post_like':post_like})
 
 
 
@@ -121,7 +140,6 @@ def login(request):
 
 
 @login_required(login_url='/login/')
-
 def like_post(request, post_id):
     post = Post.objects.get(id=post_id)
     user = request.user
@@ -142,6 +160,12 @@ def like_post(request, post_id):
             Notification.objects.create(receiver=post.author, sender =user,like_notifcation= True, post_id=post_id,  message=f'{user.get_full_name()} Liked Your Post')
         
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_required(login_url='/login/')
+def like_list(request, post_id):
+    post = Post.objects.get(id = post_id)
+    return render(request, 'base/react_list.html', {'post':post})
+
 
 @login_required(login_url='/login/')
 def postdelete(request):
@@ -266,7 +290,7 @@ def setting(request):
 def profile(request, id):
     user_data = User.objects.get(id = id)
     profile_data = Profile.objects.get(user = user_data)
-    posts = Post.objects.filter(author = user_data)
+    posts = Post.objects.filter(author = user_data).order_by('-created_at')
     post_length = len(posts)
     
     user = get_object_or_404(User, id=id)
@@ -346,17 +370,37 @@ def name_edit(request,id):
 
 
 
-@login_required(login_url='/login/')
+# @login_required(login_url='/login/')
+# def postedit(request, id):
+#     if request.method =='POST':
+#         pi = Post.objects.get(pk= id)
+#         fm = PostForm(request.POST, request.FILES, instance=pi)
+#         if fm.is_valid():
+#             fm.save()
+#     else:
+#         pi = Post.objects.get(pk= id)
+#         fm = PostForm(instance=pi)
+#     return render(request,'base/postedit.html',{'form':fm})
+
+
 def postedit(request, id):
-    if request.method =='POST':
-        pi = Post.objects.get(pk= id)
-        fm = PostForm(request.POST, request.FILES, instance=pi)
-        if fm.is_valid():
-            fm.save()
+    post = get_object_or_404(Post, pk=id)
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        formset = ImageFormSet(request.POST, request.FILES, instance=post)
+
+        if form.is_valid() and formset.is_valid():
+            form.save()
+            formset.save()
+        else:
+            print("Form errors:", form.errors)
+            print("Formset errors:", formset.errors)
     else:
-        pi = Post.objects.get(pk= id)
-        fm = PostForm(instance=pi)
-    return render(request,'base/postedit.html',{'form':fm})
+        form = PostForm(instance=post)
+        formset = ImageFormSet(instance=post)
+
+    return render(request, 'base/postedit.html', {'form': form, 'formset': formset, 'post': post})
 
 
 
@@ -495,8 +539,8 @@ def showblocklist(request):
     
 @login_required(login_url='/login/')   
 def download_image(request, image_id):
-    image = get_object_or_404(Post, pk=image_id)
-    image_path = image.postimg.path
+    image = get_object_or_404(Image, pk=image_id)
+    image_path = image.image.path
     response = FileResponse(open(image_path, 'rb'))
     return response
 
@@ -550,6 +594,7 @@ def follow_user(request, user_id):
         user_profile.following.add(user_to_follow)
         user_to_follow_profile = Profile.objects.get(user=user_to_follow)
         user_to_follow_profile.followers.add(request.user)
+        Notification.objects.create(receiver=user_to_follow, sender =request.user ,follow_notifcation= True, message=f'{request.user.get_full_name()} Follow You')
         
     elif user_to_unfollow != request.user and user_to_unfollow in user_profile.following.all():
         user_profile.following.remove(user_to_unfollow)
@@ -560,8 +605,18 @@ def follow_user(request, user_id):
     user_profile_check = get_object_or_404(Profile, user=user)
     
     followers_check = user_profile_check.followers.all()
+    
+    # followers_check = user_profile_check.followers.all()
+    
+    follow_check = False
+    for follower in followers_check:
+        if request.user == follower:
+            follow_check = True
+            break
+        else:
+            follow_check = False
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'), {'follow_check':follow_check})
 
 
 
@@ -611,10 +666,19 @@ def follower_list(request, user_id):
     profile_object = None
     for follower in followers:
         profile_object = Profile.objects.filter(user = follower)
+        
+    followers_check = user_profile.followers.all()
+    follow_check = False
+    for follower in followers_check:
+        if request.user == follower:
+            follow_check = True
+            break
+        else:
+            follow_check = False
     
     # print([f"{key}: {value}" for key, value in followers.__dict__.items()])
     
-    return render(request, 'base/follower_list.html', {'user_profile': user_profile, 'followers': followers, 'profile_object':profile_object})
+    return render(request, 'base/follower_list.html', {'user_profile': user_profile, 'followers': followers, 'profile_object':profile_object, 'follow_check': follow_check})
 
 
 
@@ -638,3 +702,35 @@ def following_list(request, user_id):
 
 
 
+def reset_password(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        username = request.POST['username']
+        passsword1 = request.POST['passsword']
+        passsword2 = request.POST['passsword_']
+        
+        user_obj = User.objects.filter(username = username, email = email)
+        if user_obj:
+            if passsword1 == passsword2:
+                user_obj = User.objects.get(username = username, email = email)
+                user_obj.set_password(passsword1)
+                user_obj.save()
+                messages.success(request,"Password Changed!")
+            else:
+                messages.success(request,"Password Not Match!")
+        else:
+            messages.success(request,"Your Don't have any Account, Please create your account!")
+        # print(email, username, passsword1, passsword2)
+    return render(request, 'base/reset.html')
+
+
+@login_required(login_url='/login/')
+def delete_account(request):
+    username = request.user.username
+    # print(username)
+    user_object = User.objects.get(username = username)
+    # print(user_object)
+    user_object.delete()
+    return redirect('/login/')
+
+    

@@ -12,4 +12,4 @@ class MessageAdmin(admin.ModelAdmin):
     
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ['id','sender','receiver', 'message', 'timestamp', 'is_read', 'like_notifcation', 'comment_notifcation','replay_notifcation', 'post_id', 'comment_id']
+    list_display = ['id','sender','receiver', 'message', 'timestamp', 'is_read', 'like_notifcation','follow_notifcation', 'comment_notifcation','replay_notifcation', 'post_id', 'comment_id']

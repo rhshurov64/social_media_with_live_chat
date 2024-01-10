@@ -9,9 +9,76 @@
 
         <!-- left side start -->
 
-        <div class="col-4">
+        <div class="col-4 mt-4">
+            <!-- sugeestions start-->
+
+            <div class="suggesions">
+                <h4 class="mb-4 text-center">People You May Know</h4>
+                <div id="third_box" class="box">
+
+
+                    
+                    <!-- suggetion profile -->
+                    <div class="container">
+                        {% for d in data|slice:"0:6" %}
+                        
+                            {% if d not in request.user.profile.following.all %}
+                            {% if d not in request.user.profile.followers.all %}
+
+                            
+                                {% if d not in request.user.profile.blocklist.all %}
+                                
+                                {% if request.user not in d.profile.blocklist.all %}
+
+                                
+
+                                <div class="row mb-2" style="border: 2px solid #F6F6F6; padding:10px; ">
+                                    <div class="col-2">
+                                        <img style="height: 60px; width:60px; border-radius:50%; border-color:#ECECEC; "
+                                            src="{{ d.profile.profileimg.url }}" class="profile_img mt-1"
+                                            alt="user profile images">
+
+                                    </div>
+
+                                    <div class="col-9 ms-2 mt-2">
+                                        <a href="{% url 'profile' d.id %}">
+                                            <h6 style="color: black;">{{ d.get_full_name }}</h6>
+                                            <p style="margin-top: -7px;" >@{{ d.username }}</p>
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                
+                                {% endif %}
+                                
+                                {% endif %}
+
+                            {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    
+                    <div class="d-flex justify-content-center">
+                        <a href="/suggestion/" class="btn btn-sm btn-outline-success mt-3"> See
+                            More ...</a>
+
+                    </div>
+
+
+
+
+
+
+                </div>
+
+            </div>
+            <!-- sugeestions end-->
+
+
             <div id="" class="box mt-4">
-                <!-- Side design start-->
+                
+                <!-- Side follow following design start-->
                 <div class="follow_following">
                     <div class="modal-dialog-scrollable">
                         <div class="modal-content">
@@ -33,7 +100,7 @@
                                     <div class="tab-content" id="myTabContent">
 
                                         <div class="tab-pane fade show active" id="Open" role="tabpanel" aria-labelledby="Open-tab">
-                                            <!-- Active chat-list start-->
+                                            <!-- My follower-->
                                             
                                             <div class="chat-list">
                                                 {% for follower in followers|slice:"0:3" %}
@@ -47,13 +114,9 @@
 
                                                         <div style="margin-left: -10px;" class="col-8">
                                                             <a href="{% url 'profile' follower.id %}">
-                                                                <h6 class="ms-1" style="color: black;">{{ follower.get_full_name }}</h6>
-                                                                <!-- <p style="margin-top:-7px; color:blue;">@{{ follower.username }}</p> -->
-                                                                {% if request.user  in follower.profile.followers.all %}
-                                                                <a style="padding: 2px 5px;" href="{% url 'suggestion_follow_user' follower.id %}" class="btn btn-sm btn-success ms-2">Following</a>
-                                                                {% else %}
-                                                                <a style="padding: 3px 10px;" href="{% url 'suggestion_follow_user' follower.id %}" class="btn btn-sm btn-primary ms-1">+ Follow</a>
-                                                                {% endif %}
+                                                                <h6 class="ms-1 mt-2" style="color: black;">{{ follower.get_full_name }}</h6>
+                                                                <p style="margin-top:-7px; color:blue;">@{{ follower.username }}</p>
+                                                                
                                                             </a>
                                                             
                                                         </div>
@@ -83,14 +146,10 @@
 
                                                         <div style="margin-left: -10px;" class="col-8">
                                                             <a href="{% url 'profile' followe.id %}">
-                                                                <h6 class="ms-1" style="color: black;">{{ followe.get_full_name }}</h6>
-                                                                <!-- <p style="margin-top:-7px; color:blue;">@{{ followe.username }}</p> -->
+                                                                <h6 class="ms-1  mt-2" style="color: black;">{{ followe.get_full_name }}</h6>
+                                                                <p style="margin-top:-7px; color:blue;">@{{ followe.username }}</p>
 
-                                                                {% if request.user  in followe.profile.following.all %}
-                                                                <a style="padding: 2px 5px;" href="{% url 'suggestion_follow_user' followe.id %}" class="btn btn-sm btn-success ms-2">Following</a>
-                                                                {% else %}
-                                                                <a style="padding: 3px 10px;" href="{% url 'suggestion_follow_user' followe.id %}" class="btn btn-sm btn-primary ms-1 px-3">+ Follow</a>
-                                                                {% endif %}
+                                                                
                                                             </a>
                                                             
                                                         </div>
@@ -112,69 +171,8 @@
                     </div>
 
                 </div>
-                    
+                 <!-- Side follow following design end-->
             </div>
-
-            <!-- sugeestions start-->
-
-            <div class="suggesions">
-                <h4 class="mb-4 text-center">People You May Know</h4>
-                <div id="third_box" class="box">
-
-
-                    
-                    <!-- suggetion profile -->
-                    <div class="container">
-                        {% for d in data|slice:"0:3" %}
-                            {% if d not in request.user.profile.following.all %}
-                            {% if d not in request.user.profile.followers.all %}
-
-                            
-                                {% if d not in request.user.profile.blocklist.all %}
-                                
-                                {% if request.user not in d.profile.blocklist.all %}
-                                    
-                                <div class="row mb-2" style="border: 2px solid #F6F6F6; padding:10px; ">
-                                    <div class="col-2">
-                                        <img style="height: 60px; width:60px; border-radius:50%; border-color:#ECECEC; "
-                                            src="{{ d.profile.profileimg.url }}" class="profile_img mt-1"
-                                            alt="user profile images">
-
-                                    </div>
-
-                                    <div class="col-9 ms-2 mt-2">
-                                        <a href="{% url 'profile' d.id %}">
-                                            <h6 style="color: black;">{{ d.get_full_name }}</h6>
-                                            <p style="margin-top: -7px;" >@{{ d.username }}</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                {% endif %}
-                                
-                                {% endif %}
-
-                            {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-
-                    
-                    <div class="d-flex justify-content-center">
-                        <a href="/suggestion/" class="btn btn-sm btn-outline-success mt-3"> See
-                            More ...</a>
-
-                    </div>
-
-
-
-
-
-
-                </div>
-
-            </div>
-            <!-- sugeestions end-->
-
 
 
         </div>
@@ -184,8 +182,6 @@
 
         
         <!-- right side start-->
-
-
 
         <div class="col-8">
 
@@ -200,7 +196,7 @@
                     <textarea name="text" id="" cols="92" rows="5" placeholder="Share Your Throughts!"></textarea>
                     <div class="row">
                         <div class="col-1 p-2">
-                            <input style="font-size: 15px;" type="file" name="image" id="">
+                            <input style="font-size: 15px;" type="file" name="image" id="" multiple>
                         </div>
 
                         <div class="col-1 offset-8  p-2">
@@ -223,22 +219,28 @@
                 
 
                 {% for p in posts %}
-                {% if p.author not in request.user.profile.blocklist.all %}
-                {% if request.user not in p.authorprofile.blocklist.all %}
 
+                <!-- Logged user post setup -->
+
+                {% if p.author == request.user %}
                 <div class="bootstrap snippets bootdey" style="overflow: hidden;">
                     <div class="col">
                         <div class="panel panel-white post panel-shadow" style="overflow: hidden;">
                             <div class="post-heading mt-3 ms-2">
                                 <div class="row image prob">
+                                    
+                                    
+                                        
                                     <div class="col-1">
+
                                         <img src="{{p.authorprofile.profileimg.url}}" class="img-circle avatar"
                                             alt="user profile image">
+                                            
                                     </div>
                                     <div class="col">
                                         <div class="row">
                                             <div class="col-10">
-                                                <div class="title h5">
+                                                <div class="title h5" style="margin-left: -10px;">
                                                     <a href="{% url 'profile' p.authorprofile.user.id %}" class=""><b>{{p.author.get_full_name}}</b></a>
                                                 </div>
                                             </div>
@@ -263,7 +265,7 @@
 
                                         </div>
 
-                                        <h6 class="text-muted time">{{p.updated_at}}</h6>
+                                        <h6 style="margin-left: -10px;" class="text-muted time">{{p.updated_at}}</h6>
                                     </div>
 
                                 </div>
@@ -271,12 +273,17 @@
                             </div>
                             <div class="post-description">
                                 <p style="margin-top: -30px;" >{{p.text}}</p>
-
-                                {% if p.postimg %}
-                                
-                                <img class="mb-3" style="height: 400px; width:auto; " src="{{ p.postimg.url }}" alt="">
-
-
+                                {% if p.images.all %}
+                                    {% for image in p.images.all %}
+                                        {% if image.image %}
+                                        <div style="position: relative; display: inline-block; margin: 0 10px 10px 0;">
+                                            <a title="Download" style="position: absolute; top: 0; right: 0;" href="{% url 'download_image' image.id %}" download>
+                                                <i style="font-size: 1.5em;" class="fa-solid fa-download"></i>
+                                            </a>
+                                            <img style="height: 200px; width:auto;" src="{{ image.image.url }}" onclick="this.requestFullscreen()" alt="Image">
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
                                 {% endif %}
 
                                 <div class="">
@@ -295,19 +302,19 @@
 
 
 
+                                        <a href="{% url 'like_list' p.id %}"><h6 class="ms-3" style="display: inline;">{{p.total_like}}</h6></a>
                                         
-                                        <h6 class="ms-3" style="display: inline;">{{p.total_like}}</h6>
 
                                         <a href="{% url 'show_comment' p.id %}"><i class="fa-regular fa-comment fa-lg  ms-5"></i></a>
                                         <h6 class="ms-3" style="display: inline;">{{p.total_comment}}</h6>
                                         
                                     </div>
-                                    
+<!--                                     
                                     {% if p.postimg %}
                                         
                                     <a title="Download" style="margin-left: 50px;" href="{% url 'download_image' p.id %}" download><i class="fa-solid fa-download fa-lg" onclick="return confirm('Donwload This Image?');"></i></a>
 
-                                    {% endif %}
+                                    {% endif %} -->
                                 </div>
                             </div>
                             
@@ -315,8 +322,121 @@
                         </div>
                     </div>
                 </div>
+
+                {% else %}
+
+                <!-- Other user post setup -->
+
+                {% if p.author not in request.user.profile.blocklist.all %}
+                {% if request.user not in p.authorprofile.blocklist.all %}
+
+                {% if p.author in request.user.profile.following.all %}
+
+                <div class="bootstrap snippets bootdey" style="overflow: hidden;">
+                    <div class="col">
+                        <div class="panel panel-white post panel-shadow" style="overflow: hidden;">
+                            <div class="post-heading mt-3 ms-2">
+                                <div class="row image prob">
+                                    <div class="col-1">
+                                        <img src="{{p.authorprofile.profileimg.url}}" class="img-circle avatar"
+                                            alt="user profile image">
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <div class="title h5" style="margin-left: -10px;">
+                                                    <a href="{% url 'profile' p.authorprofile.user.id %}" class=""><b>{{p.author.get_full_name}}</b></a>
+                                                </div>
+                                            </div>
+
+
+                                            {% if request.user.id == p.author.id or request.user.is_staff == True %}
+
+
+                                             <!-- edit delete -->
+                                            <div class="col-2">
+                                                <div class="postedit">
+                                                    <a class="me-3" href="{% url 'postedit' p.id %}" title="Edit">
+                                                        <i class="fa-regular fa-pen-to-square fa-xs"></i>
+                                                    </a>
+                                                    <a href="/postdelete?post_id={{p.id}}" onclick="return confirm('Are you sure?');" title="Delete">
+                                                        <i class="fa-solid fa-trash fa-xs"></i>
+                                                    </a>
+
+                                                </div>
+                                            </div>
+                                            {% endif %}
+
+                                        </div>
+
+                                        <h6 style="margin-left: -10px;" class="text-muted time">{{p.updated_at}}</h6>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="post-description">
+                                <p style="margin-top: -30px;" >{{p.text}}</p>
+
+                                {% if p.images.all %}
+                                    {% for image in p.images.all %}
+                                        {% if image.image %}
+                                        <div style="position: relative; display: inline-block; margin: 0 10px 10px 0;">
+                                            <a title="Download" style="position: absolute; top: 0; right: 0;" href="{% url 'download_image' image.id %}" download>
+                                                <i style="font-size: 1.5em;" class="fa-solid fa-download"></i>
+                                            </a>
+                                            <img style="height: 200px; width:auto;" src="{{ image.image.url }}" onclick="this.requestFullscreen()" alt="Image">
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+
+                                <div class="">
+
+                                    <div class="my-0 flex space-x-4 lg:font-bold" style="display: inline;">
+                                        <a style="color: red;" href="{% url 'like_post' p.id %}" class="like-btn">
+                                        
+                                        <!-- Love Icon -->
+                                        
+                                        {% if request.user in p.likes.all %}
+                                            <i class="fa-solid fa-lg fa-heart"></i>
+                                        {% else %}
+                                            <i class="fa-regular fa-lg fa-heart"></i>
+                                        {% endif %}                                          
+                                        </a>
+
+
+
+                                        <a href="{% url 'like_list' p.id %}"><h6 class="ms-3" style="display: inline;">{{p.total_like}}</h6></a>
+                                        
+
+                                        <a href="{% url 'show_comment' p.id %}"><i class="fa-regular fa-comment fa-lg  ms-5"></i></a>
+                                        <h6 class="ms-3" style="display: inline;">{{p.total_comment}}</h6>
+                                        
+                                    </div>
+                                    
+                                    <!-- {% if p.postimg %}
+                                        
+                                    <a title="Download" style="margin-left: 50px;" href="{% url 'download_image' p.id %}" download><i class="fa-solid fa-download fa-lg" onclick="return confirm('Donwload This Image?');"></i></a>
+
+                                    {% endif %} -->
+                                </div>
+                            </div>
+                            
+                            <!-- comment end -->
+                        </div>
+                    </div>
+                </div>
+
+
                 {% endif %}
                 {% endif %}
+                {% endif %}
+
+                {% endif %}
+                    
+
+                
                 {% endfor %}
             </div>
 

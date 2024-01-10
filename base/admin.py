@@ -31,6 +31,10 @@ class Verify_UserAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     list_display = ['id','author','authorprofile','username','text','postimg','created_at','updated_at','total_like','total_comment']
         
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ['id','post','image']
+        
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
     list_display = ['id','user','post','created_at']

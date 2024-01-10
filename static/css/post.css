@@ -116,3 +116,17 @@
 
 
 /* Replay Button Show Hide Css End*/
+
+
+.image-container {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px; /* Adjust this value to control the space between image containers */
+}
+
+.download-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

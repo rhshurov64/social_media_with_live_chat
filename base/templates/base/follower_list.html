@@ -47,12 +47,8 @@
                 
             </div>
             <div style="margin-top: 10px;" class="col-2">
-                    {% if request.user  in follower.profile.followers.all %}
-                    <a style="padding: 2px 5px;" href="{% url 'suggestion_follow_user' follower.id %}" class="btn btn-sm btn-success ms-2">Following</a>
-                    {% else %}
-                    <a style="padding: 3px 10px;" href="{% url 'suggestion_follow_user' follower.id %}" class="btn btn-sm btn-primary ms-1">+ Follow</a>
-                    {% endif %}
-                </a>
+                    
+                
                 
             </div>
             <hr class="mt-2">

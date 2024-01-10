@@ -3,9 +3,23 @@
 
 {% block content %}
 
+<style>
+    .user-item {
+        border: 2px solid transparent;
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+
+    .user-item.selected {
+        border-color: #00DB75;
+        box-shadow: 0 0 10px rgba(0, 219, 117, 0.5);
+    }
+</style>
 
 
-
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
  <!-- char-area -->
@@ -44,11 +58,11 @@
                                                     {% for userprofile in userprofile %}
                                                         {% if userprofile.user not in request.user.profile.blocklist.all %}
                                                         {% if request.user not in userprofile.blocklist.all %}
-                                                        <a href="{% url 'chat:chat_profile' userprofile.user.username %}" class="d-flex align-items-center">
+                                                        <a href="{% url 'chat:chat_profile' userprofile.user.username %}" class="d-flex align-items-center user-item" data-username="{{ userprofile.user.username }}" onclick="selectUser(this)">
                                                             <div class="flex-shrink-0">
                                                                 <img class="img-fluid" style="height: 40px; width: 40px; border-radius: 50%; " src="{{userprofile.profileimg.url}}" alt="user img">
                                                                 {% if userprofile.user.onlinestatus.status == 'online' %}
-                                                                <span class="active" style="display: block; content: ''; clear: both; position: absolute; bottom: 3px; left: 34px; height: 12px; width: 12px; background-color: #00DB75; border-radius: 50%; border: 2px solid #fff;"></span>
+                                                                <span class="active" style="display: block; clear: both; position: absolute; bottom: 3px; left: 34px; height: 12px; width: 12px; background-color: #00DB75; border-radius: 50%; border: 2px solid #fff;"></span>
                                                                 {% endif %}
                                                             </div>
                                                             <div class="flex-grow-1 ms-3">
@@ -182,7 +196,25 @@
     </div>
 </section>
 <!-- char-area -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var selectedUser = localStorage.getItem('selectedUser');
+
+        if (selectedUser) {
+            $(`[data-username="${selectedUser}"]`).addClass('selected');
+        }
+
+        $('.user-item').click(function () {
+            $('.user-item').removeClass('selected');
+            $(this).addClass('selected');
+
+            localStorage.setItem('selectedUser', $(this).data('username'));
+        });
+    });
     
+</script>
 
 {{username|json_script:'user_name'}}
 
@@ -205,12 +237,10 @@
     }
 
     socket.onmessage = function(event){
-
-        
-
         const data = JSON.parse(event.data)
         console.log(data.msg)
-        
+
+       
 
         var sender = data.sender;
         var chatDiv = document.getElementById('chatDiv');
